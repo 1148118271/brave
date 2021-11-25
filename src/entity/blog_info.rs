@@ -39,9 +39,12 @@ pub struct BlogInfo {
 }
 
 impl BlogInfo {
-    pub async fn query_paging(page_num: isize, limit_num: isize) -> rbatis::Result<(Vec<BlogInfo>, u64)> {
+    pub async fn query_paging(page_num: isize, limit_num: isize, params: Option<isize>) -> rbatis::Result<(Vec<BlogInfo>, u64)> {
         let rb = mysql::this();
-        let wrapper = rb.new_wrapper().order_by(false, &["publish_time"]);
+        let wrapper = match params {
+            None => {rb.new_wrapper().order_by(false, &["publish_time"])}
+            Some(v) => {rb.new_wrapper().eq("group_id", v).order_by(false, &["publish_time"])}
+        };
         let pr = PageRequest::new(page_num as u64, limit_num as u64);
         let page: Page<Self> = rb.fetch_page_by_wrapper(wrapper, &pr).await?;
 

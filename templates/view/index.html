@@ -39,11 +39,11 @@
                 <!--                 简单分页效果-->
                 <div class="pagination-simple">
                     {% if page_num > 1 %}
-                     <a href="/?page_num={{ page_num - 1 }}&limit_num={{ limit_num }}&page_count={{ page_count }}">上一页</a>
+                     <a href="/?page_num={{ page_num - 1 }}&limit_num={{ limit_num }}&page_count={{ page_count }}{%if groupId %}&group_id={{ groupId }}{% endif %}">上一页</a>
                     {% endif %}
                     <span class="current">第 {{ page_num }} 页 / 共 {{ page_count }} 页</span>
                     {% if page_num < page_count %}
-                    <a href="/?page_num={{ page_num + 1 }}&limit_num={{ limit_num }}&page_count={{ page_count }}">下一页</a>
+                    <a href="/?page_num={{ page_num + 1 }}&limit_num={{ limit_num }}&page_count={{ page_count }}{%if groupId %}&group_id={{ groupId }}{% endif %}">下一页</a>
                     {% endif %}
                 </div>
             </main>
@@ -51,7 +51,7 @@
                 <div class="widget widget-recent-posts">
                     <h3 class="widget-title">最新文章</h3>
                     <ul>
-                        {% for blog in blogList %}
+                        {% for blog in newBlogList %}
                             <li>
                                 <a href="/blog/details/{{ blog.id }}">{{ blog.title }}</a>
                             </li>
@@ -62,15 +62,11 @@
                 <div class="widget widget-category">
                     <h3 class="widget-title">分类</h3>
                     <ul>
+                        {% for gr in groupBlog %}
                         <li>
-                            <a href="#">Django 博客教程 <span class="post-count">(13)</span></a>
+                            <a href="/?page_num={{ 1 }}&limit_num={{ 4 }}&group_id={{ gr.group_id }}">{{ gr.group_name }} <span class="post-count">({{ gr.count }})</span></a>
                         </li>
-                        <li>
-                            <a href="#">Python 教程 <span class="post-count">(11)</span></a>
-                        </li>
-                        <li>
-                            <a href="#">Django 用户认证 <span class="post-count">(8)</span></a>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
 
