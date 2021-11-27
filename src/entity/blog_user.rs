@@ -8,7 +8,7 @@ use rbatis::{ crud_table };
 use rbatis::crud::CRUD;
 use rbatis::db::DBExecResult;
 
-use crate::util::mysql;
+use crate::util::{date_utils, mysql};
 
 
 #[crud_table]
@@ -33,9 +33,9 @@ pub struct BlogUser {
     // 头像
     pub portrait: Option<String>,
     // 创建时间
-    pub create_time: Option<NaiveDateTime>,
+    pub create_time: Option<date_utils::DateTimeUtil>,
     // 修改时间
-    pub update_time: Option<NaiveDateTime>,
+    pub update_time: Option<date_utils::DateTimeUtil>,
     // 逻辑删除标志 0 已删除 1 未删除
     pub del: Option<u8>,
 }

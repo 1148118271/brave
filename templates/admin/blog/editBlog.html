@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    {{ head | safe }}
+    <script type="text/javascript" src="/static/js/showdown.js"></script>
+    <style>
+
+        .markdown-here-wrapper {
+            font-size: 16px;
+            line-height: 1.8em;
+            letter-spacing: 0.1em;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<input type="text" id="blogId" value="{{ blog_id }}" style="display:none">
+<div style="float: left; width: 48%; height: 800px">
+    <textarea id="oriContent" class="markdown-here-wrapper" onkeyup="convert()"></textarea>
+</div>
+<div id="result" style="float: left; margin-left: 4%; margin-top: 0; width: 45%; height: 800px; border:1px solid #000000"></div>
+
+
+<!--<&#45;&#45;写转化函数&#45;&#45;!>-->
+<script type="text/javascript">
+    function convert(){
+        var text = document.getElementById("oriContent").value;
+        var converter = new showdown.Converter();
+        var html = converter.makeHtml(text);
+        document.getElementById("result").innerHTML = html;
+    }
+
+    function get_html() {
+        let html = $('#result').html();
+        let id = $('#blogId').val();
+        let json = {
+            blog_info_id: id,
+            details: html
+        }
+        let r = null
+        $.ajax({
+            url: "/admin/blog/saveDetails",
+            data: json,
+            type: "post",
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                r = result;
+            },
+        })
+        return r
+    }
+
+</script>
+
+</body>
+</html>

@@ -3,7 +3,7 @@ use actix_web::{
     get,
 };
 use actix_web::http::{HeaderMap, HeaderName, HeaderValue, StatusCode};
-use actix_web::web::{Json, Query};
+use actix_web::web::{Json, Path, Query};
 use log4rs::append::Append;
 use tera::Context;
 
@@ -83,8 +83,9 @@ pub async fn index(params: Query<vo::BlogPage>) -> HttpResponse {
 }
 
 
-#[get("/blog/details")]
-pub async fn details() -> HttpResponse {
+#[get("/blog/details/{id}")]
+pub async fn details(id: Path<isize>) -> HttpResponse {
+    println!("{} ", id);
     let mut context = Context::new();
     template::init(&mut context);
     let string = TeraEntity::render("view/details", &context).unwrap();

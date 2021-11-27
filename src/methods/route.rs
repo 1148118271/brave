@@ -24,5 +24,13 @@ pub async fn init() -> std::io::Result<()> {
             .service(methods::admin::user::user_list)
             .service(methods::admin::user::user_add)
             .service(methods::admin::user::user_save)
+            .service(methods::admin::blog::blog)
+            .service(methods::admin::blog::blog_list)
+            .service(methods::admin::blog::blog_add)
+            .service(methods::admin::blog::blog_save)
+            .service(methods::admin::blog::blog_del)
+            .service(methods::admin::blog::edit_blog)
+            .service(methods::admin::blog::save_details)
+            .service(methods::admin::blog::published)
     }).bind(("0.0.0.0", config::this().port))?.run().await
 }
