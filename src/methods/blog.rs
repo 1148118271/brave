@@ -8,7 +8,7 @@ use log4rs::append::Append;
 use tera::Context;
 
 
-use crate::entity::{BlogInfo, BlogUser, vo};
+use crate::entity::{BlogDetails, BlogInfo, BlogUser, vo};
 use crate::util::tera::TeraEntity;
 use crate::util::{html, html_err, Results};
 use super::template;
@@ -84,10 +84,44 @@ pub async fn index(params: Query<vo::BlogPage>) -> HttpResponse {
 
 
 #[get("/blog/details/{id}")]
-pub async fn details(id: Path<isize>) -> HttpResponse {
-    println!("{} ", id);
+pub async fn details(id: Path<usize>) -> HttpResponse {
+    let result = BlogInfo::add_read(id.0).await;
+    if result.is_err() {
+        return html_err();
+    }
+
+    let result = BlogDetails::query_by_blog_info_id(id.0).await;
+    if result.is_err() {
+        log::error!("获取博客详情异常, 异常信息为: {}", result.err().unwrap_or(rbatis::Error::E("未知异常!".to_string())));
+        return html_err();
+    }
+    let result = result.unwrap();
+
     let mut context = Context::new();
     template::init(&mut context);
+
+    match result {
+        None => context.insert("details", "<h1>暂无详情</h1>"),
+        Some(v) => context.insert("details", &v.details)
+    }
+
+    let blog_info = BlogInfo::query_by_id(id.0).await;
+    if blog_info.is_err() {
+        log::error!("获取博客信息异常, 异常信息为: {}", blog_info.err().unwrap_or(rbatis::Error::E("未知异常!".to_string())));
+        return html_err();
+    }
+    let blog_info = blog_info.unwrap();
+    if blog_info.is_none() {
+        log::error!("获取博客信息异常");
+        return html_err();
+    }
+
+
+    let mut blog_info = blog_info.unwrap();
+    blog_info.user_name = Some("子木".to_string());
+
+    context.insert("blogInfo", &blog_info);
+
     let string = TeraEntity::render("view/details", &context).unwrap();
     html(string)
 }

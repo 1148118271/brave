@@ -16,123 +16,77 @@
 					<main class="col-md-12">
 						<article class="post post-1">
 							<header class="entry-header">
-								<h1 class="entry-title">Django 博客开发入门教程：前言</h1>
+								<h1 class="entry-title">{{ blogInfo.title }}</h1>
 								<div class="entry-meta">
-									<span class="post-category"><a href="#">Django 博客教程</a></span>
-									<span class="post-date"><a href="#"><time class="entry-date"
-																			  datetime="2012-11-09T23:15:57+00:00">2017年5月11日</time></a></span>
-									<span class="post-author"><a href="#">追梦人物</a></span>
-									<span class="comments-link"><a href="#">4 评论</a></span>
-									<span class="views-count"><a href="#">588 阅读</a></span>
+									<span class="post-category"><a href="#">{{ blogInfo.title }}</a></span>
+									<span class="post-date"><a href="#">{{ blogInfo.publish_time }}</a></span>
+									<span class="post-author"><a href="#">{{ blogInfo.user_name }}</a></span>
+<!--									<span class="comments-link"><a href="#"> 评论</a></span>-->
+									<span class="views-count"><a href="#">{{ blogInfo.read_count }} 阅读</a></span>
 								</div>
 							</header>
 							<div class="entry-content clearfix" style="border: 1px saddlebrown">
-								<h2><center>MaHua是什么?</center></h2>
-								<p>一个在线编辑markdown文档的编辑器
-
-								</p>
-								<h2><center>MaHua有哪些功能？</center></h2>
-								<ul>
-									<li>方便的<code>导入导出</code>功能<ul>
-										<li>直接把一个markdown的文本文件拖放到当前这个页面就可以了</li>
-										<li>导出为一个html格式的文件，样式一点也不会丢失</li>
-									</ul>
-									</li>
-									<li>编辑和预览<code>同步滚动</code>，所见即所得（右上角设置）</li>
-									<li><code>VIM快捷键</code>支持，方便vim党们快速的操作 （右上角设置）</li>
-									<li>强大的<code>自定义CSS</code>功能，方便定制自己的展示</li>
-									<li>有数量也有质量的<code>主题</code>,编辑器和预览区域</li>
-									<li>完美兼容<code>Github</code>的markdown语法</li>
-									<li>预览区域<code>代码高亮</code></li>
-									<li>所有选项自动记忆</li>
-								</ul>
-								<h2>有问题反馈</h2>
-								<p>在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流
-
-								</p>
-								<ul>
-									<li>邮件(dev.hubo#gmail.com, 把#换成@)</li>
-									<li>微信:jserme</li>
-									<li>weibo: <a href="http://weibo.com/ihubo">@草依山</a></li>
-									<li>twitter: <a href="http://twitter.com/ihubo">@ihubo</a></li>
-								</ul>
-								<h2>捐助开发者</h2>
-								<p>在兴趣的驱动下,写一个<code>免费</code>的东西，有欣喜，也还有汗水，希望你喜欢我的作品，同时也能支持一下。
-								</p>
-								<h2>感激</h2>
-								<p>感谢以下的项目,排名不分先后
-
-								</p>
-								<ul>
-									<li><a href="http://ace.ajax.org/">ace</a></li>
-									<li><a href="http://jquery.com">jquery</a></li>
-								</ul>
-								<h2>关于作者</h2>
-								<pre><code class="lang-javascript">var ihubo = {
-  nickName  : "草依山",
-  site : "http://jser.me"
-}</code></pre>
-								<p>Edit By <a href="http://mahua.jser.me">MaHua</a></p>
+								{{ details | safe }}
 							</div>
 						</article>
-						<section class="comment-area" id="comment-area">
-							<hr>
-							<h3>发表评论</h3>
-							<form action="#" method="post" class="comment-form">
-								<div class="row">
-									<div class="col-md-4">
-										<label for="id_name">名字：</label>
-										<input type="text" id="id_name" name="name" required>
-									</div>
-									<div class="col-md-4">
-										<label for="id_email">邮箱：</label>
-										<input type="email" id="id_email" name="email" required>
-									</div>
-									<div class="col-md-4">
-										<label for="id_url">网址：</label>
-										<input type="text" id="id_url" name="url">
-									</div>
-									<div class="col-md-12">
-										<label for="id_comment">评论：</label>
-										<textarea name="comment" id="id_comment" required></textarea>
-										<button type="submit" class="comment-btn">发表</button>
-									</div>
-								</div>    <!-- row -->
-							</form>
-							<div class="comment-list-panel">
-								<h3>评论列表，共 <span>4</span> 条评论</h3>
-								<ul class="comment-list list-unstyled">
-									<li class="comment-item">
-										<span class="nickname">追梦人物</span>
-										<time class="submit-date" datetime="2012-11-09T23:15:57+00:00">2017年3月12日 14:56</time>
-										<div class="text">
-											文章观点又有道理又符合人性，这才是真正为了表达观点而写，不是为了迎合某某知名人士粉丝而写。我觉得如果琼瑶是前妻，生了三孩子后被一不知名的女人挖了墙角，我不信谁会说那个女人是追求真爱，说同情琼瑶骂小三的女人都是弱者。
-										</div>
-									</li>
-									<li class="comment-item">
-										<span class="nickname">zmrenwu</span>
-										<time class="submit-date" datetime="2012-11-09T23:15:57+00:00">2017年3月11日 23:56</time>
-										<div class="text">
-											本能有可能会冲破格局，但格局有时候也会拘住本能。
-										</div>
-									</li>
-									<li class="comment-item">
-										<span class="nickname">蝙蝠侠</span>
-										<time class="submit-date" datetime="2012-11-09T23:15:57+00:00">2017年3月9日 8:56</time>
-										<div class="text">
-											其实真理一般是属于沉默的大多数的。那些偏激的观点只能吸引那些同样偏激的人。前几年琼瑶告于妈抄袭，大家都表示大快人心，说明吃瓜观众都只是就事论事，并不是对琼瑶有偏见。
-										</div>
-									</li>
-									<li class="comment-item">
-										<span class="nickname">长江七号</span>
-										<time class="submit-date" datetime="2012-11-09T23:15:57+00:00">2017年2月12日 12:56</time>
-										<div class="text">
-											观点我很喜欢！就是哎嘛本来一清二楚的，来个小三小四乱七八糟一团乱麻夹缠不清，简直麻烦要死
-										</div>
-									</li>
-								</ul>
-							</div>
-						</section>
+<!--						<section class="comment-area" id="comment-area">-->
+<!--							<hr>-->
+<!--							<h3>发表评论</h3>-->
+<!--							<form action="#" method="post" class="comment-form">-->
+<!--								<div class="row">-->
+<!--									<div class="col-md-4">-->
+<!--										<label for="id_name">名字：</label>-->
+<!--										<input type="text" id="id_name" name="name" required>-->
+<!--									</div>-->
+<!--									<div class="col-md-4">-->
+<!--										<label for="id_email">邮箱：</label>-->
+<!--										<input type="email" id="id_email" name="email" required>-->
+<!--									</div>-->
+<!--									<div class="col-md-4">-->
+<!--										<label for="id_url">网址：</label>-->
+<!--										<input type="text" id="id_url" name="url">-->
+<!--									</div>-->
+<!--									<div class="col-md-12">-->
+<!--										<label for="id_comment">评论：</label>-->
+<!--										<textarea name="comment" id="id_comment" required></textarea>-->
+<!--										<button type="submit" class="comment-btn">发表</button>-->
+<!--									</div>-->
+<!--								</div>    &lt;!&ndash; row &ndash;&gt;-->
+<!--							</form>-->
+<!--							<div class="comment-list-panel">-->
+<!--								<h3>评论列表，共 <span>4</span> 条评论</h3>-->
+<!--								<ul class="comment-list list-unstyled">-->
+<!--									<li class="comment-item">-->
+<!--										<span class="nickname">追梦人物</span>-->
+<!--										<time class="submit-date" datetime="2012-11-09T23:15:57+00:00">2017年3月12日 14:56</time>-->
+<!--										<div class="text">-->
+<!--											文章观点又有道理又符合人性，这才是真正为了表达观点而写，不是为了迎合某某知名人士粉丝而写。我觉得如果琼瑶是前妻，生了三孩子后被一不知名的女人挖了墙角，我不信谁会说那个女人是追求真爱，说同情琼瑶骂小三的女人都是弱者。-->
+<!--										</div>-->
+<!--									</li>-->
+<!--									<li class="comment-item">-->
+<!--										<span class="nickname">zmrenwu</span>-->
+<!--										<time class="submit-date" datetime="2012-11-09T23:15:57+00:00">2017年3月11日 23:56</time>-->
+<!--										<div class="text">-->
+<!--											本能有可能会冲破格局，但格局有时候也会拘住本能。-->
+<!--										</div>-->
+<!--									</li>-->
+<!--									<li class="comment-item">-->
+<!--										<span class="nickname">蝙蝠侠</span>-->
+<!--										<time class="submit-date" datetime="2012-11-09T23:15:57+00:00">2017年3月9日 8:56</time>-->
+<!--										<div class="text">-->
+<!--											其实真理一般是属于沉默的大多数的。那些偏激的观点只能吸引那些同样偏激的人。前几年琼瑶告于妈抄袭，大家都表示大快人心，说明吃瓜观众都只是就事论事，并不是对琼瑶有偏见。-->
+<!--										</div>-->
+<!--									</li>-->
+<!--									<li class="comment-item">-->
+<!--										<span class="nickname">长江七号</span>-->
+<!--										<time class="submit-date" datetime="2012-11-09T23:15:57+00:00">2017年2月12日 12:56</time>-->
+<!--										<div class="text">-->
+<!--											观点我很喜欢！就是哎嘛本来一清二楚的，来个小三小四乱七八糟一团乱麻夹缠不清，简直麻烦要死-->
+<!--										</div>-->
+<!--									</li>-->
+<!--								</ul>-->
+<!--							</div>-->
+<!--						</section>-->
 					</main>
 				</div>
 			</div>

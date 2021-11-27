@@ -149,7 +149,40 @@ impl BlogInfo {
         let wrapper = rb.new_wrapper().eq("id", id);
         rb.update_by_wrapper::<PublishedVo>(&PublishedVo { publish_time: Some(date_utils::DateTimeUtil::from(Local::now())), is_publish: Some("1".to_string()) }, wrapper, &[]).await;
     }
+
+    pub async fn add_read(id: usize) -> rbatis::Result<()> {
+        let rb = mysql::this();
+        let option = Self::query_by_id(id).await?;
+        if option.is_none() {
+            log::error!("未查到博客信息, 查询条件为: [id = {}]", id);
+            return Err(rbatis::Error::E("博客信息查询为空!".to_string()))
+        }
+
+        let mut info = option.unwrap();
+        let i = info.read_count.unwrap_or(0);
+        let rcv = ReadCountVo {
+            read_count: Some(i + 1)
+        };
+
+        let wrapper = rb.new_wrapper().eq("id", id);
+        rb.update_by_wrapper::<ReadCountVo>(&rcv, wrapper, &[]).await?;
+        Ok(())
+    }
+
+    pub async fn query_by_id(id: usize) -> rbatis::Result<Option<Self>> {
+        let rb = mysql::this();
+        rb.fetch_by_column("id", &id).await
+    }
 }
+
+
+#[crud_table(table_name:"blog_info")]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+struct ReadCountVo {
+    // 阅读次数
+    pub read_count: Option<u32>,
+}
+
 
 #[crud_table(table_name:"blog_info")]
 #[derive(Clone, Debug, Serialize, Deserialize)]
