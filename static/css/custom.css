@@ -203,7 +203,7 @@ img {
  */
 
 .content-body {
-    padding-bottom: 4em;
+    padding-bottom: 5em;
 }
 
 .post {
@@ -443,19 +443,10 @@ img {
     color: #444;
 }
 
-/**
- * 6.0 - Footer
- */
-
-#site-footer {
-    padding-top: 10px;
-    padding: 0 0 1.5em 0;
-}
-
 .copyright {
     text-align: center;
     padding-top: 1em;
-    margin: 0;
+    /*margin: 0;*/
     border-top: 1px solid #eee;
     color: #666;
 }
@@ -895,4 +886,14 @@ img {
 
 .current a {
     color: red;
+}
+
+
+#site-footer{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: #969696;
+    text-align: center;
 }

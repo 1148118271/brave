@@ -36,6 +36,18 @@ pub mod template {
             <script src="/static/js/bootstrap.min_v3.js"></script>
             <script src="/static/js/pace.min.js"></script>
             <script src="/static/js/modernizr.custom.js"></script>
+
+            <style>
+                html {
+                    height: 100%;
+                }
+                body {
+                    margin: 0;
+                    padding: 0;
+                    min-height: 100%;
+                    position: relative;
+                }
+            </style>
         "#
     }
 

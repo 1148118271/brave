@@ -86,7 +86,6 @@ pub async fn published(id: Path<usize>) -> Json<Results<String>> {
 #[post("/admin/blog/save")]
 pub async fn blog_save(mut params: Form<BlogInfo>) -> Json<Results<String>> {
     let mut info = params.0;
-    println!("{:?}", info);
     info.user_account = Some(String::from("gxk"));
     info.read_count = Some(0);
     info.is_publish = Some(String::from("0"));
