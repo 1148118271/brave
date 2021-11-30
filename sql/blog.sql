@@ -135,14 +135,20 @@ LOCK TABLES `blog_user` WRITE;
 INSERT INTO `blog_user` VALUES (1,'gxk','e308bb9ed8e7904b1ae3cd1458475d18','子木',0,24,'13964019534','gxk_717@163.com',NULL,'2021-11-15 15:41:33','2021-11-15 15:41:35',1);
 /*!40000 ALTER TABLE `blog_user` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-27 20:49:05
+
+-- 2021-11-30 17:00:53 博客评论表
+DROP TABLE IF EXISTS `blog_comments`;
+create table blog_comments
+(
+    id          int auto_increment
+        primary key,
+    blog_id     int          not null comment '博客关联id',
+    name        varchar(100) null comment '名字',
+    email       varchar(200) null comment '邮箱',
+    url         varchar(500) null comment '网址',
+    comment     text         null comment '评论',
+    create_time datetime     null comment '发表时间'
+)
+    comment '博客评论';
