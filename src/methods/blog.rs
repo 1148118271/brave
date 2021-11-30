@@ -1,16 +1,18 @@
 use actix_web::{
     HttpResponse,
     get,
+    post
 };
 use actix_web::http::{HeaderMap, HeaderName, HeaderValue, StatusCode};
-use actix_web::web::{Json, Path, Query};
+use actix_web::web::{Form, Json, Path, Query};
+use chrono::Local;
 use log4rs::append::Append;
 use tera::Context;
 
 
-use crate::entity::{BlogDetails, BlogInfo, BlogUser, vo};
+use crate::entity::{BlogComments, BlogDetails, BlogInfo, BlogUser, vo};
 use crate::util::tera::TeraEntity;
-use crate::util::{html, html_err, Results};
+use crate::util::{date_utils, html, html_err, Results};
 use super::template;
 
 use serde:: {
@@ -124,4 +126,25 @@ pub async fn details(id: Path<usize>) -> HttpResponse {
 
     let string = TeraEntity::render("view/details", &context).unwrap();
     html(string)
+}
+
+#[get("/blog/comment/{id}")]
+pub async fn comment(id: Path<usize>) -> Json<Results<Vec<BlogComments>>> {
+    let result = BlogComments::query_by_blog_id(id.into_inner()).await;
+    let mut rv: Vec<BlogComments> = match result.ok() {
+        None => {
+            log::error!("获取博客评论列表异常！");
+            vec![]
+        }
+        Some(v) => v
+    };
+    Json(Results::success("成功！", rv))
+}
+
+#[post("/blog/comment/save")]
+pub async fn comment_save(params: Form<BlogComments>) -> Json<Results<String>> {
+    let mut comments = params.0;
+    comments.create_time = Some(date_utils::DateTimeUtil::from(Local::now()));
+    comments.save().await;
+    Json(Results::success("成功！", String::new()))
 }

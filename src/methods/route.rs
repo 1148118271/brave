@@ -9,12 +9,16 @@ pub async fn init() -> std::io::Result<()> {
         let p = path::this();
         let conf = config::this();
         let static_path = format!("{}/static", p);
+        let favicon = format!("{}/static/img/favicon.ico", p);
         App::new()
             .wrap(auth::Auth)
             .service(Files::new("static/", &static_path))
             .service(Files::new("files/", &conf.file_upload_path))
+            .service(Files::new("favicon.ico", &favicon))
             .service(methods::blog::index)
             .service(methods::blog::details)
+            .service(methods::blog::comment)
+            .service(methods::blog::comment_save)
             .service(methods::file::upload)
             .service(methods::admin::login::admin)
             .service(methods::admin::login::login)

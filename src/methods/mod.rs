@@ -60,7 +60,7 @@ pub mod template {
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <p class="copyright">&copy 2021 - 鲁ICP备2021040389</p>
+                            <p class="copyright">&copy 2021 💓 <a target="_blank" href="https://github.com/1148118271/blogs"> 由blogs支持 </a> </p>
                         </div>
                     </div>
                 </div>
