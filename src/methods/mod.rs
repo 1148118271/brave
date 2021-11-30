@@ -20,6 +20,7 @@ pub mod template {
        return
            r#"
              <title>子木 - 个人博客</title>
+            <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
 
             <!-- meta -->
             <meta charset="UTF-8">
