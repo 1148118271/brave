@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 	<head>
 		{{ head | safe }}
-
-		<script type="text/javascript" src="http://hovertree.com/texiao/yestop/inc/jquery.yestop.js"></script>
+		<link rel="stylesheet" href="/static/css/highlight_styles/github.min.css">
+		<script type="text/javascript" src="/static/js/jquery.yestop.js"></script>
 	</head>
 
 	<body>
@@ -82,7 +82,15 @@
 
 
 	<script>
-		$(document).ready(function () { $.fn.yestop(); })
+		$(document).ready(function () {
+			$.fn.yestop({
+				"yes_image": "",
+				"yes_radius": "30%",
+				"yes_html": "Top&#8593;",
+				"yes_backColor":"#f1ecec",
+				"yes_hoverHtml":"Go Top"
+			});
+		})
 
 
 		$(() => {

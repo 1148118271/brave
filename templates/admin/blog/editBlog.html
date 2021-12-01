@@ -2,7 +2,11 @@
 <html lang="zh-CN">
 <head>
     {{ head | safe }}
+
+    <link rel="stylesheet" href="/static/css/highlight_styles/github.min.css">
+
     <script type="text/javascript" src="/static/js/showdown.js"></script>
+    <script type="text/javascript" src="/static/js/highlight.min.js"></script>
     <style>
 
         .markdown-here-wrapper {
@@ -15,7 +19,7 @@
     </style>
 </head>
 
-<let>
+<body>
 <input type="text" id="blogId" value="{{ blog_id }}" style="display:none">
 <div style="float: left; width: 48%; height: 800px">
     <textarea id="oriContent" class="markdown-here-wrapper" onkeyup="convert()"></textarea>
@@ -30,6 +34,7 @@
         var converter = new showdown.Converter();
         var html = converter.makeHtml(text);
         document.getElementById("result").innerHTML = html;
+        hljs.initHighlightingOnLoad()
     }
 
     function get_html() {

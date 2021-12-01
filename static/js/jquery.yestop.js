@@ -12,7 +12,7 @@
             yes_position: 'fixed',
             yes_width: '48px',
             yes_height: '48px',
-            yes_image: '/static/img/toTop.jpeg',
+            yes_image: '',
             yes_hoverImage: '',
             yes_length: '268',
             yes_time: 500,
