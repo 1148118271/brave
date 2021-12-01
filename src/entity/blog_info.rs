@@ -8,7 +8,7 @@ use serde:: {
     Serialize,
     Deserialize,
 };
-use crate::entity::{ BlogGroup, BlogUser};
+use crate::entity::{BlogComments, BlogGroup, BlogUser};
 use crate::util::{ mysql, date_utils };
 
 #[crud_table(table_columns:"id, title, generalize, user_account, publish_time, group_id, read_count, is_publish, create_time, update_time")]
@@ -78,10 +78,17 @@ impl BlogInfo {
 
             x.group_name = Some(group_name);
 
-            x.comment_count = Some(0);
-
+            let bc = BlogComments::query_by_blog_id(x.id.unwrap_or_default()).await;
+            match bc {
+                Ok(v) => {
+                    x.comment_count = Some(v.len() as u32);
+                }
+                Err(e) => {
+                    log::error!("根据blog_id查询评论异常, 异常信息为:{}, blog_id为: {}", e, x.id.unwrap_or_default());
+                    x.comment_count = Some(0);
+                }
+            }
         }
-
         Ok((result, pages))
     }
 

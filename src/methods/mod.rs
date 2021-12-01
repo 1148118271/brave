@@ -77,7 +77,7 @@ pub mod template {
                     <div class="row">
                         <div class="col-md-4 col-sm-5 col-xs-8">
                             <div class="logo">
-                                <h1><a href="/">子木</a></h1>
+                                <h1><a href="/"><img src="/static/img/logo.png" style="height: 43px;" /></a></h1>
                             </div>
                         </div><!-- col-md-4 -->
                         <div class="col-md-8 col-sm-7 col-xs-4">

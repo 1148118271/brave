@@ -44,6 +44,8 @@ pub mod vo {
                         blog_group bg
                     on
                         bi.group_id = bg.id
+                    where
+                        bi.is_publish = 1
                     group by
                         bi.group_id;
                     "#, Vec::new()).await?;
