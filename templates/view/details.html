@@ -1,42 +1,140 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-	{{ head | safe }}
-</head>
-<body>
-{{ container | safe }}
+	<head>
+		{{ head | safe }}
+		<link rel="stylesheet" href="/static/css/highlight_styles/github.min.css">
+		<script type="text/javascript" src="/static/js/jquery.yestop.js"></script>
+	</head>
 
-<div class="content-body" style="margin-top: 20px">
-	<div class="container">
-		<div class="row">
-			<main class="col-md-8">
-				<table class="table a2">
-					<tbody>
-					<tr>
-						{% for g in group %}
-						<td style="border-top: none">
-							<blockquote>
-								<p>{{ g.group_name }}（{{ g.count }}）</p>
-								<ul>
-									{% for v in g.blog_info %}
-									<li><a href="/blog/details/{{ v.id }}">{{ v.title }}</a></li>
-									{% endfor %}
+	<body>
+
+	{{ container | safe }}
+
+		<div class="content-body">
+			<div class="container">
+				<div class="row">
+					<main class="col-md-12">
+						<article class="post post-1">
+							<header class="entry-header">
+								<h1 class="entry-title">{{ blogInfo.title }}</h1>
+								<div class="entry-meta">
+									<span class="post-date">{{ blogInfo.publish_time }}</span>
+									<span class="views-count">{{ blogInfo.read_count }} 阅读</span>
+								</div>
+							</header>
+							<div class="entry-content clearfix" style="border: 1px saddlebrown">
+								{{ details | safe }}
+							</div>
+						</article>
+						<section class="comment-area" id="comment-area">
+							<hr>
+							<h3>发表评论</h3>
+							<form class="comment-form">
+								<div class="row">
+									<div class="col-md-4">
+										<label for="id_name">名字：</label>
+										<input type="text" id="id_name" name="name" required>
+									</div>
+									<div class="col-md-4">
+										<label for="id_email">邮箱：</label>
+										<input type="email" id="id_email" name="email" required>
+									</div>
+									<div class="col-md-4">
+										<label for="id_url">网址：</label>
+										<input type="text" id="id_url" name="url">
+									</div>
+									<div class="col-md-12">
+										<label for="id_comment">评论：</label>
+										<textarea name="comment" id="id_comment" required></textarea>
+										<button class="comment-btn" onclick="save()">发表</button>
+									</div>
+								</div>    <!-- row -->
+							</form>
+							<div class="comment-list-panel">
+								<h3>评论列表，共 <span id="commentCount">0</span> 条评论</h3>
+								<ul class="comment-list list-unstyled" id="commentList">
 								</ul>
-							</blockquote>
-						</td>
-						{% endfor %}
-					</tr>
-					</tbody>
-				</table>
-			</main>
+							</div>
+						</section>
+					</main>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
 
-{{ footer | safe }}
 
-{{ mobile_menu | safe }}
+	{{ footer | safe }}
 
-<script src="/static/js/script.js"></script>
-</body>
+	{{ mobile_menu | safe }}
+
+	<script src="/static/js/script.js"></script>
+	<script type="text/javascript" src="/static/js/jsonUtil.js"></script>
+
+
+	<script>
+		$(document).ready(function () {
+			$.fn.yestop({
+				"yes_image": "",
+				"yes_radius": "30%",
+				"yes_html": "Top&#8593;",
+				"yes_backColor":"#f1ecec",
+				"yes_hoverHtml":"Go Top"
+			});
+		})
+
+
+		$(() => {
+			getComments()
+		})
+
+		function save() {
+			let json = $('form').toJson()
+
+			if (!json.name
+					|| !json.email
+					|| !json.comment) {
+				return
+			}
+
+			json.blog_id = '{{ blogInfo.id }}'
+			$.ajax({
+				url: "/blog/comment/save",
+				data: json,
+				type: "post",
+				dataType: "json",
+				async: false,
+				success: function (result) {
+					getComments()
+				},
+			})
+		}
+
+
+		function getComments() {
+			let html_str = ""
+			$.ajax({
+				url: "/blog/comment/{{ blogInfo.id }}",
+				type: "get",
+				dataType: "json",
+				async: false,
+				success: function (result) {
+					let data = result.data;
+					$('#commentCount').text(data.length)
+					for (let d of data) {
+						html_str = html_str.concat(`
+							<li class="comment-item">
+							<span class="nickname">${d.name}</span>
+							<time class="submit-date">${d.create_time}</time>
+							<div class="text">
+								${d.comment}
+							</div>
+							</li>
+						`)
+					}
+				},
+			})
+			$('#commentList').html(html_str)
+		}
+
+	</script>
+	</body>
 </html>
