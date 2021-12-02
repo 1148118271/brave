@@ -11,28 +11,24 @@
 <div class="content-body">
     <div class="container">
         <div class="row">
-            <main class="col-md-8">
+            <main class="col-md-12">
                 {% for blog in blogList %}
                 <article class="post">
                     <header class="entry-header">
-                        <h1 class="entry-title">
+                        <h1 class="entry-title a1">
                             <a href="/blog/details/{{ blog.id }}" >{{ blog.title }}</a>
                         </h1>
                         <div class="entry-meta">
-                            <span class="post-category"><a href="javascript:void(0)">{{ blog.group_name }}</a></span>
-                            <span class="post-date"><a href="javascript:void(0)">{{ blog.publish_time }}</a></span>
-<!--                            <span class="post-author"><a href="javascript:void(0)">{{ blog.user_name }}</a></span>-->
-                            <span class="comments-link"><a href="javascript:void(0)">{{ blog.comment_count }} 评论</a></span>
-                            <span class="views-count"><a href="javascript:void(0)">{{ blog.read_count }} 阅读</a></span>
+                            <span class="post-category">{{ blog.group_name }}</span>
+                            <span class="post-date">{{ blog.publish_time }}</span>
+                            <span class="comments-link">{{ blog.comment_count }} 评论</span>
+                            <span class="views-count">{{ blog.read_count }} 阅读</span>
                         </div>
                     </header>
-                    <div class="entry-content clearfix">
+                    <div class="entry-content clearfix index-content">
                         <p>
                           {{ blog.generalize }}
                         </p>
-                        <div class="read-more cl-effect-14">
-                            <a href="/blog/details/{{ blog.id }}" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
-                        </div>
                     </div>
                 </article>
                 {% endfor %}
@@ -47,53 +43,13 @@
                     {% endif %}
                 </div>
             </main>
-            <aside class="col-md-4">
-                <div class="widget widget-recent-posts">
-                    <h3 class="widget-title">最新文章</h3>
-                    <ul>
-                        {% for blog in newBlogList %}
-                            <li>
-                                <a href="/blog/details/{{ blog.id }}">{{ blog.title }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <div class="widget widget-category">
-                    <h3 class="widget-title">分类</h3>
-                    <ul>
-                        {% for gr in groupBlog %}
-                        <li>
-                            <a href="/?page_num={{ 1 }}&limit_num={{ 4 }}&group_id={{ gr.group_id }}">{{ gr.group_name }} <span class="post-count">({{ gr.count }})</span></a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <div class="widget widget-tag-cloud">
-                    <h3 class="widget-title">友链</h3>
-                    <ul>
-                        <li>
-                            <a target="_blank"  href="https://www.baidu.com">百度</a>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
         </div>
     </div>
 </div>
 
 {{ footer | safe }}
 
-<!-- Mobile Menu -->
-<div class="overlay overlay-hugeinc">
-    <button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>
-    <nav>
-        <ul>
-            <li><a href="/">首页</a></li>
-        </ul>
-    </nav>
-</div>
+{{ mobile_menu | safe }}
 
 <script src="/static/js/script.js"></script>
 

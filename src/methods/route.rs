@@ -19,6 +19,7 @@ pub async fn init() -> std::io::Result<()> {
             .service(methods::blog::details)
             .service(methods::blog::comment)
             .service(methods::blog::comment_save)
+            .service(methods::blog::group)
             .service(methods::file::upload)
             .service(methods::admin::login::admin)
             .service(methods::admin::login::login)

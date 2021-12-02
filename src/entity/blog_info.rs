@@ -180,6 +180,12 @@ impl BlogInfo {
         let rb = mysql::this();
         rb.fetch_by_column("id", &id).await
     }
+
+    pub async fn query_by_group_id_is_publish(group_id: usize) -> rbatis::Result<Vec<Self>> {
+        let rb = mysql::this();
+        let wrapper = rb.new_wrapper().eq("group_id", group_id).eq("is_publish", "1");
+        rb.fetch_list_by_wrapper(wrapper).await
+    }
 }
 
 

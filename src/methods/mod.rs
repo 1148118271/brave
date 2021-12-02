@@ -14,6 +14,7 @@ pub mod template {
         con.insert("head", head());
         con.insert("footer", footer());
         con.insert("container", container());
+        con.insert("mobile_menu", mobile_menu());
     }
 
     fn head() -> &'static str {
@@ -37,22 +38,27 @@ pub mod template {
             <script src="/static/js/bootstrap.min_v3.js"></script>
             <script src="/static/js/pace.min.js"></script>
             <script src="/static/js/modernizr.custom.js"></script>
-
-            <style>
-                html {
-                    height: 100%;
-                }
-                body {
-                    margin: 0;
-                    padding: 0;
-                    min-height: 100%;
-                    position: relative;
-                }
-            </style>
         "#
     }
 
 
+    fn mobile_menu() -> &'static str {
+        return
+            r#"
+            <!-- Mobile Menu -->
+            <div class="overlay overlay-hugeinc">
+                <button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>
+                <nav>
+                    <ul>
+                        <li><a href="/">首页</a></li>
+                        <li><a href="/blog/group">分类</a></li>
+                        <li><a href="/">友链</a></li>
+                        <li><a href="/">关于</a></li>
+                    </ul>
+                </nav>
+            </div>
+        "#
+    }
 
     fn footer() -> &'static str {
         return
@@ -61,7 +67,7 @@ pub mod template {
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <p class="copyright">&copy 2021 💓 <a target="_blank" href="https://github.com/1148118271/blogs"> 由blogs支持 </a> </p>
+                            <p class="copyright a2">&copy 2021 💓 由<a target="_blank" href="https://github.com/1148118271/blogs">blogs</a>支持 </p>
                         </div>
                     </div>
                 </div>
@@ -91,6 +97,9 @@ pub mod template {
                                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                     <ul class="nav navbar-nav navbar-right">
                                         <li class="cl-effect-11"><a href="/" data-hover="首页">首页</a></li>
+                                        <li class="cl-effect-11"><a href="/blog/group" data-hover="分类">分类</a></li>
+                                        <li class="cl-effect-11"><a href="/" data-hover="友链">友链</a></li>
+                                        <li class="cl-effect-11"><a href="/" data-hover="关于">关于</a></li>
                                     </ul>
                                 </div><!-- /.navbar-collapse -->
                             </nav>

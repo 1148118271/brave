@@ -19,7 +19,7 @@ use serde:: {
     Serialize,
     Deserialize,
 };
-
+use crate::head;
 
 
 #[get("/")]
@@ -53,30 +53,9 @@ pub async fn index(params: Query<vo::BlogPage>) -> HttpResponse {
         return html_err();
     }
     let (all, page_count) = res.unwrap();
-
-    // 获取最新的五条博客
-    let new_blog = BlogInfo::query_paging(1, 5, None).await;
-    if new_blog.is_err() {
-        log::error!("获取博客列表异常, 异常信息为: {}", new_blog.err().unwrap_or(rbatis::Error::E("未知异常!".to_string())));
-        return html_err();
-    }
-    let (new_blog, _) = new_blog.unwrap();
-
-    // 获取博客分类列表
-    let gr = vo::GroupRes::query_blog_group().await;
-    if gr.is_err() {
-        log::error!("获取博客列表异常, 异常信息为: {}", gr.err().unwrap_or(rbatis::Error::E("未知异常!".to_string())));
-        return html_err();
-    }
-    let gr = gr.unwrap();
-
     let mut context = Context::new();
     template::init(&mut context);
     context.insert("blogList", &all);
-    context.insert("newBlogList", &new_blog);
-    context.insert("newBlogList", &new_blog);
-    context.insert("groupBlog", &gr);
-    context.insert("groupId", &params.group_id);
     context.insert("page_count", &page_count);
     context.insert("page_num", &page_num);
     context.insert("limit_num", &limit_num);
@@ -118,7 +97,6 @@ pub async fn details(id: Path<usize>) -> HttpResponse {
         return html_err();
     }
 
-
     let mut blog_info = blog_info.unwrap();
     blog_info.user_name = Some("子木".to_string());
 
@@ -139,6 +117,24 @@ pub async fn comment(id: Path<usize>) -> Json<Results<Vec<BlogComments>>> {
         Some(v) => v
     };
     Json(Results::success("成功！", rv))
+}
+
+
+#[get("/blog/group")]
+pub async fn group() -> HttpResponse {
+    let mut context = Context::new();
+    template::init(&mut context);
+    let group = vo::GroupRes::query_blog_group().await;
+    let group = match group {
+        Ok(v) => v,
+        Err(e) => {
+            log::error!("获取分组列表异常, 异常信息为: {}", e);
+            vec![]
+        }
+    };
+    context.insert("group", &group);
+    let string = TeraEntity::render("view/group", &context).unwrap();
+    html(string)
 }
 
 #[post("/blog/comment/save")]

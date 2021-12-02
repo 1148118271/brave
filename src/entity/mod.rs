@@ -16,6 +16,7 @@ pub mod vo {
     use serde::{ Deserialize, Serialize };
     use rbatis::{ crud_table };
     use rbatis::executor::Executor;
+    use crate::entity::{BlogGroup, BlogInfo};
     use crate::util::mysql;
 
     #[crud_table]
@@ -27,29 +28,23 @@ pub mod vo {
         pub group_id: usize,
         // 分组下博客数量
         pub count: u32,
+        pub blog_info: Vec<BlogInfo>
     }
 
     impl GroupRes {
         pub async fn query_blog_group() -> rbatis::Result<Vec<Self>> {
-            let rb = mysql::this();
-            let x = rb.fetch(
-                r#"
-                    select
-                        bg.group_value group_name,
-                        bi.group_id group_id,
-                        count(bi.group_id) count
-                    from
-                        blog_info bi
-                    left join
-                        blog_group bg
-                    on
-                        bi.group_id = bg.id
-                    where
-                        bi.is_publish = 1
-                    group by
-                        bi.group_id;
-                    "#, Vec::new()).await?;
-            Ok(x)
+            let mut r = vec![];
+            let vec = BlogGroup::query_all().await?;
+            for x in vec {
+                let publish = BlogInfo::query_by_group_id_is_publish(x.id).await?;
+                r.push(GroupRes {
+                    group_name: x.group_value.clone(),
+                    group_id: x.id,
+                    count: publish.len() as u32,
+                    blog_info: publish
+                })
+            }
+            Ok(r)
         }
     }
 

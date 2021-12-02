@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    {{ head | safe }}
+</head>
+<body>
+{{ container | safe }}
+
+<div class="content-body" style="margin-top: 20px">
+    <div class="container">
+        <div class="row">
+            <main class="col-md-8">
+                <table class="table a2">
+                    <tbody>
+                    <tr>
+                        {% for g in group %}
+                        <td style="border-top: none">
+                            <blockquote>
+                                <p>{{ g.group_name }}（{{ g.count }}）</p>
+                                <ul>
+                                    {% for v in g.blog_info %}
+                                    <li><a href="/blog/details/{{ v.id }}">{{ v.title }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </blockquote>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    </tbody>
+                </table>
+            </main>
+        </div>
+    </div>
+</div>
+
+{{ footer | safe }}
+
+{{ mobile_menu | safe }}
+
+<script src="/static/js/script.js"></script>
+</body>
+</html>

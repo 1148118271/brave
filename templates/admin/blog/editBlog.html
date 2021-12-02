@@ -31,7 +31,7 @@
 <script type="text/javascript">
     function convert(){
         var text = document.getElementById("oriContent").value;
-        var converter = new showdown.Converter();
+        var converter = new showdown.Converter({tables: true});
         var html = converter.makeHtml(text);
         document.getElementById("result").innerHTML = html;
         hljs.initHighlightingOnLoad()
