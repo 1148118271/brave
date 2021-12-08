@@ -1,5 +1,5 @@
-use blogs::{methods, util};
-use blogs::util::{path, tera, config, mysql};
+use brave::{methods, util};
+use brave::util::{path, tera, config, mysql};
 
 #[actix_web::main]
 async fn main() {

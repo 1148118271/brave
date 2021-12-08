@@ -669,7 +669,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "blogs"
+name = "brave"
 version = "0.1.0"
 dependencies = [
  "actix-files",

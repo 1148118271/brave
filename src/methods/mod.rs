@@ -24,6 +24,7 @@ pub mod template {
             <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
 
             <!-- meta -->
+            <meta name="baidu-site-verification" content="code-ZPTJy4ymGi" />
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
 
