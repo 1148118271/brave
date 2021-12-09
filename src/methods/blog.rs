@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use actix_web::{
     HttpResponse,
     get,
@@ -6,59 +7,41 @@ use actix_web::{
 use actix_web::http::{HeaderMap, HeaderName, HeaderValue, StatusCode};
 use actix_web::web::{Form, Json, Path, Query};
 use chrono::Local;
-use log4rs::append::Append;
+use serde_json::Value;
 use tera::Context;
 
 
 use crate::entity::{BlogComments, BlogDetails, BlogInfo, BlogUser, vo};
 use crate::util::tera::TeraEntity;
 use crate::util::{date_utils, html, html_err, Results};
-use super::template;
-
-use serde:: {
-    Serialize,
-    Deserialize,
-};
-use crate::head;
 
 
 #[get("/")]
-pub async fn index(params: Query<vo::BlogPage>) -> HttpResponse {
-    let mut params = params.0;
-    if params.page_num.is_none() {
-        params.page_num = Some(1)
-    }
-    if params.limit_num.is_none() {
-        params.limit_num = Some(4)
-    }
+pub async fn index(pn: Query<HashMap<String, String>>) -> HttpResponse {
 
-    let page_num = params.page_num.unwrap();
-    let limit_num = params.limit_num.unwrap();
+    let mut page_num = 1_u64;
+    let limit_num = 5_u64;
 
-    if params.page_count.is_some() {
-        if page_num < 1 || page_num > params.page_count.unwrap() {
-            let mut response = HttpResponse::new(StatusCode::FOUND);
-            let header: &mut HeaderMap = response.headers_mut();
-            let k = HeaderName::from_bytes(b"location").unwrap();
-            let v = HeaderValue::from_bytes(b"/").unwrap();
-            header.append(k, v);
-            return response
-        }
-    }
+    let pns = (*pn).get("page_num");
+    match pns {
+        Some(vo) => page_num = vo.parse::<u64>().unwrap_or(1),
+        _ => {}
+    };
 
     // 获取博客
-    let res = BlogInfo::query_paging(params.page_num.unwrap(), params.limit_num.unwrap(), params.group_id).await;
-    if res.is_err() {
-        log::error!("获取博客列表异常, 异常信息为: {}", res.err().unwrap_or(rbatis::Error::E("未知异常!".to_string())));
-        return html_err();
-    }
-    let (all, page_count) = res.unwrap();
+    let res = BlogInfo::query_paging(page_num, limit_num).await;
+    let (all, page_count) = match res {
+        Ok(v) => v,
+        Err(e) => {
+            log::error!("获取博客列表异常, 异常信息为: {}", e);
+            return html_err();
+        }
+    };
+
     let mut context = Context::new();
-    template::init(&mut context);
     context.insert("blogList", &all);
     context.insert("page_count", &page_count);
     context.insert("page_num", &page_num);
-    context.insert("limit_num", &limit_num);
     let string = TeraEntity::render("view/index", &context).unwrap();
     html(string)
 }
@@ -79,7 +62,6 @@ pub async fn details(id: Path<usize>) -> HttpResponse {
     let result = result.unwrap();
 
     let mut context = Context::new();
-    template::init(&mut context);
 
     match result {
         None => context.insert("details", "<h1>暂无详情</h1>"),
@@ -123,7 +105,6 @@ pub async fn comment(id: Path<usize>) -> Json<Results<Vec<BlogComments>>> {
 #[get("/blog/group")]
 pub async fn group() -> HttpResponse {
     let mut context = Context::new();
-    template::init(&mut context);
     let group = vo::GroupRes::query_blog_group().await;
     let group = match group {
         Ok(v) => v,

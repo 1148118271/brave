@@ -15,9 +15,7 @@ pub use blog_comments::BlogComments;
 pub mod vo {
     use serde::{ Deserialize, Serialize };
     use rbatis::{ crud_table };
-    use rbatis::executor::Executor;
     use crate::entity::{BlogGroup, BlogInfo};
-    use crate::util::mysql;
 
     #[crud_table]
     #[derive(Serialize, Deserialize, Debug, Clone)]

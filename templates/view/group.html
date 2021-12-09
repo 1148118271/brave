@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    {{ head | safe }}
-</head>
-<body>
-{{ container | safe }}
-
+{% extends "view/base.html" %}
+{% block content %}
 <div class="content-body" style="margin-top: 20px">
     <div class="container">
         <div class="row">
@@ -32,11 +26,4 @@
         </div>
     </div>
 </div>
-
-{{ footer | safe }}
-
-{{ mobile_menu | safe }}
-
-<script src="/static/js/script.js"></script>
-</body>
-</html>
+{% endblock content %}

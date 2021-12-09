@@ -1,8 +1,6 @@
 use std::borrow::BorrowMut;
-use std::collections::HashMap;
 use actix_web::HttpResponse;
 use actix_web::{ get, post };
-use actix_web::Either::B;
 use actix_web::web::{Form, Json, Path, Query};
 use chrono::Local;
 use crate::entity::{BlogDetails, BlogGroup, BlogInfo};
@@ -84,7 +82,7 @@ pub async fn published(id: Path<usize>) -> Json<Results<String>> {
 }
 
 #[post("/admin/blog/save")]
-pub async fn blog_save(mut params: Form<BlogInfo>) -> Json<Results<String>> {
+pub async fn blog_save(params: Form<BlogInfo>) -> Json<Results<String>> {
     let mut info = params.0;
     info.user_account = Some(String::from("gxk"));
     info.read_count = Some(0);

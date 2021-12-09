@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    {{ head | safe }}
-</head>
-
-<body>
-
-{{ container | safe }}
-
+{% extends "view/base.html" %}
+{% block content %}
 <div class="content-body">
     <div class="container">
         <div class="row">
@@ -35,23 +27,15 @@
                 <!--                 简单分页效果-->
                 <div class="pagination-simple">
                     {% if page_num > 1 %}
-                     <a href="/?page_num={{ page_num - 1 }}&limit_num={{ limit_num }}&page_count={{ page_count }}{%if groupId %}&group_id={{ groupId }}{% endif %}">上一页</a>
+                     <a href="/?page_num={{ page_num - 1 }}">上一页</a>
                     {% endif %}
                     <span class="current">第 {{ page_num }} 页 / 共 {{ page_count }} 页</span>
                     {% if page_num < page_count %}
-                    <a href="/?page_num={{ page_num + 1 }}&limit_num={{ limit_num }}&page_count={{ page_count }}{%if groupId %}&group_id={{ groupId }}{% endif %}">下一页</a>
+                    <a href="/?page_num={{ page_num + 1 }}">下一页</a>
                     {% endif %}
                 </div>
             </main>
         </div>
     </div>
 </div>
-
-{{ footer | safe }}
-
-{{ mobile_menu | safe }}
-
-<script src="/static/js/script.js"></script>
-
-</body>
-</html>
+{% endblock content %}

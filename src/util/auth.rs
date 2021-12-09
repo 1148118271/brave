@@ -12,6 +12,7 @@ use futures::future::{ok, Ready};
 
 use crate::util::session;
 
+
 const PATHS: [&str; 8] = ["/", "/list", "/admin", "/admin/login", "/static/*", "/files/*", "/blog/*", "/favicon.ico"];
 
 pub struct Auth;

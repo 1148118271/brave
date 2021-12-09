@@ -1,9 +1,7 @@
-use bson::{Bson, DateTime};
-use chrono::{Local, NaiveDateTime};
-use rbatis::crud::{CRUD, CRUDTable};
-use rbatis::{crud_table, py_sql, DateTimeNative, Page, PageRequest, Error};
+use chrono::Local;
+use rbatis::crud::CRUD;
+use rbatis::{crud_table, Page, PageRequest};
 use rbatis::db::DBExecResult;
-use rbatis::executor::{Executor, RbatisExecutor};
 use serde:: {
     Serialize,
     Deserialize,
@@ -42,20 +40,20 @@ pub struct BlogInfo {
 
 
 impl BlogInfo {
-    pub async fn query_paging(page_num: isize, limit_num: isize, params: Option<isize>) -> rbatis::Result<(Vec<Self>, u64)> {
+    pub async fn query_paging(page_num: u64, limit_num: u64) -> rbatis::Result<(Vec<Self>, u64)> {
         let rb = mysql::this();
-        let wrapper = match params {
-            None => {rb.new_wrapper().eq("is_publish", 1).order_by(false, &["create_time"])}
-            Some(v) => {rb.new_wrapper().eq("is_publish", 1).eq("group_id", v).order_by(false, &["create_time"])}
-        };
-        let pr = PageRequest::new(page_num as u64, limit_num as u64);
+        let wrapper =
+            rb.new_wrapper()
+            .eq("is_publish", 1)
+            .order_by(false, &["create_time"]);
+        let pr = PageRequest::new(page_num, limit_num);
         let page: Page<Self> = rb.fetch_page_by_wrapper(wrapper, &pr).await?;
 
         let pages = page.pages;
 
         let mut result = page.records;
         if result.len() == 0 {
-           return Ok((result, 1u64))
+           return Ok((result, 1_u64))
         }
 
         for mut x in &mut result {
@@ -165,7 +163,7 @@ impl BlogInfo {
             return Err(rbatis::Error::E("博客信息查询为空!".to_string()))
         }
 
-        let mut info = option.unwrap();
+        let  info = option.unwrap();
         let i = info.read_count.unwrap_or(0);
         let rcv = ReadCountVo {
             read_count: Some(i + 1)
@@ -185,6 +183,12 @@ impl BlogInfo {
         let rb = mysql::this();
         let wrapper = rb.new_wrapper().eq("group_id", group_id).eq("is_publish", "1");
         rb.fetch_list_by_wrapper(wrapper).await
+    }
+
+    pub async fn count_by_is_publish() -> rbatis::Result<u64> {
+        let rb = mysql::this();
+        let wrapper = rb.new_wrapper().eq("is_publish", "1");
+        rb.fetch_count_by_wrapper::<BlogInfo1>(wrapper).await
     }
 }
 
