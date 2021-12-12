@@ -152,3 +152,17 @@ create table blog_comments
     create_time datetime     null comment '发表时间'
 )
     comment '博客评论';
+
+DROP TABLE IF EXISTS `blog_links`;
+-- auto-generated definition
+create table blog_links
+(
+    id          int auto_increment
+        primary key,
+    link_name   varchar(100)           null,
+    link_url    varchar(100)           null,
+    flag        varchar(1) default '0' null comment '是否展示 0 不展示 1 展示',
+    create_time datetime               null comment '添加时间'
+)
+    comment '友链';
+

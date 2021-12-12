@@ -14,29 +14,29 @@ use crate::util::{date_utils, mysql};
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BlogUser {
     // 主键
-    pub id: Option<u64>,
+    pub id:                 Option<u64>,
     // 账号
-    pub account: Option<String>,
+    pub account:            Option<String>,
     // 密码
-    pub password: Option<String>,
+    pub password:           Option<String>,
     // 名称
-    pub name: Option<String>,
+    pub name:               Option<String>,
     // 性别 0男 1女
-    pub sex: Option<u8>,
+    pub sex:                Option<u8>,
     // 年龄
-    pub age: Option<u16>,
+    pub age:                Option<u16>,
     // 手机号
-    pub phone: Option<String>,
+    pub phone:              Option<String>,
     // 邮箱
-    pub email: Option<String>,
+    pub email:              Option<String>,
     // 头像
-    pub portrait: Option<String>,
+    pub portrait:           Option<String>,
     // 创建时间
-    pub create_time: Option<date_utils::DateTimeUtil>,
+    pub create_time:        Option<date_utils::DateTimeUtil>,
     // 修改时间
-    pub update_time: Option<date_utils::DateTimeUtil>,
+    pub update_time:        Option<date_utils::DateTimeUtil>,
     // 逻辑删除标志 0 已删除 1 未删除
-    pub del: Option<u8>,
+    pub del:                Option<u8>,
 }
 
 impl BlogUser {

@@ -3,6 +3,7 @@ mod blog_info;
 mod blog_group;
 mod blog_details;
 mod blog_comments;
+mod blog_links;
 
 
 pub use blog_user::BlogUser;
@@ -10,6 +11,7 @@ pub use blog_info::BlogInfo;
 pub use blog_group::BlogGroup;
 pub use blog_details::BlogDetails;
 pub use blog_comments::BlogComments;
+pub use blog_links::BlogLinks;
 
 
 pub mod vo {

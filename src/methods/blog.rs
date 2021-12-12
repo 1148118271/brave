@@ -1,17 +1,17 @@
 use std::collections::HashMap;
+use std::ops::DerefMut;
 use actix_web::{
     HttpResponse,
     get,
     post
 };
-use actix_web::http::{HeaderMap, HeaderName, HeaderValue, StatusCode};
 use actix_web::web::{Form, Json, Path, Query};
 use chrono::Local;
 use serde_json::Value;
 use tera::Context;
 
 
-use crate::entity::{BlogComments, BlogDetails, BlogInfo, BlogUser, vo};
+use crate::entity::{BlogComments, BlogDetails, BlogInfo, BlogLinks, BlogUser, vo};
 use crate::util::tera::TeraEntity;
 use crate::util::{date_utils, html, html_err, Results};
 
@@ -124,4 +124,36 @@ pub async fn comment_save(params: Form<BlogComments>) -> Json<Results<String>> {
     comments.create_time = Some(date_utils::DateTimeUtil::from(Local::now()));
     comments.save().await;
     Json(Results::success("成功！", String::new()))
+}
+
+#[get("/blog/friendLinks")]
+pub async fn friend_links() -> HttpResponse {
+    let result = BlogLinks::query_all_by_flag().await;
+    let vec = match result {
+        Ok(v) => v,
+        Err(e) => {
+            log::error!("获取友链列表异常, 异常信息为: {}", e);
+            vec![]
+        }
+    };
+    let mut context = Context::new();
+    context.insert("blogLinks", &vec);
+    let string = TeraEntity::render("view/friendLinks", &context).unwrap();
+    html(string)
+}
+
+#[post("/blog/friendLinks/save")]
+pub async fn links_save(mut params: Form<BlogLinks>) -> Json<Results<String>> {
+    let links = &mut *params;
+    links.create_time = Some(date_utils::DateTimeUtil::from(Local::now()));
+    links.flag = Some("0".to_string());
+    links.save().await;
+    Json(Results::success("成功！", String::new()))
+}
+
+#[get("/blog/about")]
+pub async fn about() -> HttpResponse {
+    let mut context = Context::new();
+    let string = TeraEntity::render("view/about", &context).unwrap();
+    html(string)
 }

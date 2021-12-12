@@ -22,27 +22,27 @@
 						{{ details | safe }}
 					</div>
 				</article>
-				<section class="comment-area" id="comment-area">
+				<span class="comment-area" id="comment-area">
 					<hr>
 					<h3>发表评论</h3>
-					<form class="comment-form">
+					<form class="comment-form" id="myForm">
 						<div class="row">
 							<div class="col-md-4">
-								<label for="id_name">名字：</label>
-								<input type="text" id="id_name" name="name" required>
+								<label for="name">名字：</label>
+								<input type="text" id="name" style="border-radius: 5px" name="name" required>
 							</div>
 							<div class="col-md-4">
-								<label for="id_email">邮箱：</label>
-								<input type="email" id="id_email" name="email" required>
+								<label for="id_email" >邮箱：</label>
+								<input type="text" id="id_email" style="border-radius: 5px" name="email" required>
 							</div>
 							<div class="col-md-4">
-								<label for="id_url">网址：</label>
-								<input type="text" id="id_url" name="url">
+								<label for="id_url" >网址：</label>
+								<input type="text" id="id_url" style="border-radius: 5px" name="url" required>
 							</div>
 							<div class="col-md-12">
-								<label for="id_comment">评论：</label>
-								<textarea name="comment" id="id_comment" required></textarea>
-								<button class="comment-btn" onclick="save()">发表</button>
+								<label for="comment">评论：</label>
+								<textarea name="comment" style="border-radius: 5px" id="comment" required></textarea>
+								<button type="button" class="comment-btn" onclick="save()">发表</button>
 							</div>
 						</div>    <!-- row -->
 					</form>
@@ -51,7 +51,7 @@
 						<ul class="comment-list list-unstyled" id="commentList">
 						</ul>
 					</div>
-				</section>
+				</span>
 			</main>
 		</div>
 	</div>
@@ -60,6 +60,7 @@
 
 {% block script %}
 <script type="text/javascript" src="/static/js/jsonUtil.js"></script>
+<script type="text/javascript" src="/static/js/layer.js"></script>
 
 
 <script>
@@ -78,26 +79,40 @@
 		getComments()
 	})
 
+	function notNull(json) {
+		for (let jsonKey in json) {
+			let lab = $('label[for='+ jsonKey +']').text();
+			if (lab) {
+				if (!json[jsonKey]) {
+					layer.msg(lab + "不能为空")
+					return false
+				}
+			}
+		}
+		return true
+	}
+
 	function save() {
 		let json = $('form').toJson()
-
-		if (!json.name
-				|| !json.email
-				|| !json.comment) {
-			return
+		if (notNull(json)) {
+			json.blog_id = '{{ blogInfo.id }}'
+			$.ajax({
+				url: "/blog/comment/save",
+				data: json,
+				type: "post",
+				dataType: "json",
+				async: false,
+				success: function (result) {
+					if (result.code === 500) {
+						layer.msg(result.msg, {icon: 2});
+					} else {
+						layer.msg(result.msg, {icon: 1});
+					}
+					document.getElementById("myForm").reset();
+					getComments()
+				},
+			})
 		}
-
-		json.blog_id = '{{ blogInfo.id }}'
-		$.ajax({
-			url: "/blog/comment/save",
-			data: json,
-			type: "post",
-			dataType: "json",
-			async: false,
-			success: function (result) {
-				getComments()
-			},
-		})
 	}
 
 

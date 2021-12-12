@@ -1,9 +1,14 @@
+use std::env;
 use std::path::Path;
 
 static mut PATH: Option<String> = None;
 
 pub fn init() {
-    let path = Path::new("./");
+    let args: Vec<String> = env::args().collect();
+    let mut path = Path::new("./");
+    if args.len() >= 2 {
+        unsafe { path = Path::new(args[1].as_str()) }
+    }
     let buf = path.canonicalize().unwrap();
     let x = buf.to_str().unwrap();
     unsafe { PATH = Some(x.to_string()) }
@@ -12,7 +17,7 @@ pub fn init() {
 pub fn this() -> &'static String {
     unsafe {
         match &PATH {
-            None => panic!("加载数据库异常!"),
+            None => panic!("默认配置路径加载异常!"),
             Some(v) => v
         }
     }

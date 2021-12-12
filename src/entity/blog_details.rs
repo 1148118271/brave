@@ -11,13 +11,13 @@ use crate::util::{date_utils, mysql};
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BlogDetails {
     // 主键
-    pub id: Option<usize>,
+    pub id:                 Option<usize>,
     // 博客信息关联id
-    pub blog_info_id: Option<usize>,
+    pub blog_info_id:       Option<usize>,
     // 博客详细信息
-    pub details: Option<String>,
-    pub create_time: Option<date_utils::DateTimeUtil>,
-    pub update_time: Option<date_utils::DateTimeUtil>
+    pub details:            Option<String>,
+    pub create_time:        Option<date_utils::DateTimeUtil>,
+    pub update_time:        Option<date_utils::DateTimeUtil>
 }
 
 impl BlogDetails {

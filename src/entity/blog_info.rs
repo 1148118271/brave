@@ -13,29 +13,29 @@ use crate::util::{ mysql, date_utils };
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BlogInfo {
     // 主键
-    pub id: Option<usize>,
+    pub id:                 Option<usize>,
     // 标题
-    pub title: Option<String>,
+    pub title:              Option<String>,
     // 简介/概括
-    pub generalize: Option<String>,
+    pub generalize:         Option<String>,
     // 用户账号
-    pub user_account: Option<String>,
+    pub user_account:       Option<String>,
     // 用户名称
-    pub user_name: Option<String>,
+    pub user_name:          Option<String>,
     // 发布时间
-    pub publish_time: Option<date_utils::DateTimeUtil>,
+    pub publish_time:       Option<date_utils::DateTimeUtil>,
     // 分组关联id
-    pub group_id: Option<usize>,
+    pub group_id:           Option<usize>,
     // 分组名称
-    pub group_name: Option<String>,
+    pub group_name:         Option<String>,
     // 评论次数
-    pub comment_count: Option<u32>,
+    pub comment_count:      Option<u32>,
     // 阅读次数
-    pub read_count: Option<u32>,
+    pub read_count:         Option<u32>,
     // 是否发布 0 未发布, 1 已发布
-    pub is_publish: Option<String>,
-    pub create_time: Option<date_utils::DateTimeUtil>,
-    pub update_time: Option<date_utils::DateTimeUtil>
+    pub is_publish:         Option<String>,
+    pub create_time:        Option<date_utils::DateTimeUtil>,
+    pub update_time:        Option<date_utils::DateTimeUtil>
 }
 
 
