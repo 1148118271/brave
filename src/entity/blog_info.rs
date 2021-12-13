@@ -6,10 +6,10 @@ use serde:: {
     Serialize,
     Deserialize,
 };
-use crate::entity::{BlogComments, BlogGroup, BlogUser};
+use crate::entity::{BlogComments, BlogDetails, BlogGroup, BlogUser};
 use crate::util::{ mysql, date_utils };
 
-#[crud_table(table_columns:"id, title, generalize, user_account, publish_time, group_id, read_count, is_publish, create_time, update_time")]
+#[crud_table(table_columns:"id, title, user_account, publish_time, group_id, read_count, is_publish, create_time, update_time")]
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BlogInfo {
     // 主键
@@ -44,7 +44,7 @@ impl BlogInfo {
         let rb = mysql::this();
         let wrapper =
             rb.new_wrapper()
-            .eq("is_publish", 1)
+            .eq("is_publish", "1".to_string())
             .order_by(false, &["create_time"]);
         let pr = PageRequest::new(page_num, limit_num);
         let page: Page<Self> = rb.fetch_page_by_wrapper(wrapper, &pr).await?;
@@ -57,6 +57,7 @@ impl BlogInfo {
         }
 
         for mut x in &mut result {
+            let id = x.id.unwrap_or_default();
             let acc = match &x.user_account {
                 None => "gxk",
                 Some(x) => x.as_str()
@@ -76,16 +77,29 @@ impl BlogInfo {
 
             x.group_name = Some(group_name);
 
-            let bc = BlogComments::query_by_blog_id(x.id.unwrap_or_default()).await;
+            let bc = BlogComments::query_by_blog_id(id).await;
             match bc {
                 Ok(v) => {
                     x.comment_count = Some(v.len() as u32);
                 }
                 Err(e) => {
-                    log::error!("根据blog_id查询评论异常, 异常信息为:{}, blog_id为: {}", e, x.id.unwrap_or_default());
+                    log::error!("根据blog_id查询评论异常, 异常信息为:{}, blog_id为: {}", e, id);
                     x.comment_count = Some(0);
                 }
             }
+
+            let option = x.id;
+
+            let ds = BlogDetails::query_by_blog_info_id(id)
+                .await?
+                .unwrap_or(BlogDetails {
+                id: None,
+                blog_info_id: None,
+                details: None,
+                create_time: None,
+                update_time: None
+            });
+            x.generalize = ds.details;
         }
         Ok((result, pages))
     }
@@ -129,7 +143,6 @@ impl BlogInfo {
             &BlogInfo1 {
                 id: self.id,
                 title: self.title.clone(),
-                generalize: self.generalize.clone(),
                 user_account: self.user_account.clone(),
                 publish_time: self.publish_time,
                 group_id: self.group_id,
@@ -215,8 +228,6 @@ struct BlogInfo1{
     pub id: Option<usize>,
     // 标题
     pub title: Option<String>,
-    // 简介/概括
-    pub generalize: Option<String>,
     // 用户账号
     pub user_account: Option<String>,
     // 发布时间

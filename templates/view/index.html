@@ -1,4 +1,19 @@
 {% extends "view/base.html" %}
+
+{% block head %}
+
+<style>
+    .p1 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+    }
+</style>
+
+{% endblock head %}
+
 {% block content %}
 <div class="content-body">
     <div class="container">
@@ -17,11 +32,12 @@
                             <span class="views-count">{{ blog.read_count }} 阅读</span>
                         </div>
                     </header>
-                    <div class="entry-content clearfix index-content">
+                    <div class="entry-content clearfix p1">
                         <p>
-                          {{ blog.generalize }}
+                          {{ blog.generalize | safe }}
                         </p>
                     </div>
+                    <hr />
                 </article>
                 {% endfor %}
                 <!--                 简单分页效果-->
