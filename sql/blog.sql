@@ -166,3 +166,17 @@ create table blog_links
 )
     comment '友链';
 
+
+DROP TABLE IF EXISTS `blog_files`;
+-- auto-generated definition
+create table blog_files
+(
+    id          int auto_increment comment '主键'
+        primary key,
+    file_url    varchar(1024) not null comment '文件路径',
+    upload_time datetime      not null comment '上传时间'
+)
+    comment '文件信息';
+
+
+
