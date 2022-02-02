@@ -3,3 +3,6 @@ port = 8888
 database_url = "mysql://root:root@localhost:3306/blogs"
 
 file_upload_path = "/Users/gaoxiangkang/rust/code/brave/upload/"
+
+#domain_name = "http://www.gxklyzm.cn"
+domain_name = "http://127.0.0.1:8888"

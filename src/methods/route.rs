@@ -40,5 +40,9 @@ pub async fn init() -> std::io::Result<()> {
             .service(methods::admin::blog::edit_blog)
             .service(methods::admin::blog::save_details)
             .service(methods::admin::blog::published)
+            .service(methods::admin::file::file)
+            .service(methods::admin::file::file_list)
+            .service(methods::admin::file::file_save)
+            .service(methods::admin::file::file_del)
     }).bind(("0.0.0.0", config::this().port))?.run().await
 }

@@ -8,9 +8,10 @@ static mut CONFIG: Option<Config> = None;
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
-    pub port: u16,
-    pub database_url: String,
-    pub file_upload_path: String,
+    pub port:               u16,
+    pub database_url:       String,
+    pub file_upload_path:   String,
+    pub domain_name:        String,
 }
 
 pub fn init() {

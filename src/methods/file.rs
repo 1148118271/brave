@@ -20,6 +20,7 @@ pub async fn upload(mut data: Multipart) -> Json<Results<String>> {
     let file_type = f.file_type();
     let fts: Vec<&str> = file_type.split("/").collect();
     let uuid = Uuid::new_v4().to_string();
+    let uuid = uuid.replace("-", "");
     let file_name = format!("{}.{}", uuid, fts[1]);
 
     let file_uri = format!("{}{}", up, &file_name);
