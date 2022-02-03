@@ -27,7 +27,12 @@ impl BlogFiles {
         rb.fetch_list().await
     }
 
-    pub async fn delete(id: String) {
+    pub async fn query_by_id(id: usize) -> rbatis::Result<Option<Self>> {
+        let rb = mysql::this();
+        rb.fetch_by_column("id", &id).await
+    }
+
+    pub async fn delete(id: usize) {
         let rb = mysql::this();
         rb.remove_by_wrapper::<Self>(rb.new_wrapper().set_dml("delete").eq("id",&id)).await;
     }

@@ -1,8 +1,10 @@
+use std::ffi::OsStr;
 use actix_multipart::Multipart;
 use actix_web::{get, post, HttpResponse};
 use actix_web::test::config;
 use actix_web::web::{Form, Json, Path, Query};
 use chrono::Local;
+use futures::future::err;
 use crate::entity::BlogFiles;
 use crate::util::{date_utils, head, html_err, html, PageParams, Paging, Results, config};
 use crate::util::tera::TeraEntity;
@@ -65,7 +67,38 @@ pub async fn file_save(mut params: Form<BlogFiles>) -> Json<Results<String>> {
 }
 
 #[get("/admin/file/del/{id}")]
-pub async fn file_del(id: Path<String>) -> Json<Results<String>> {
+pub async fn file_del(id: Path<usize>) -> Json<Results<String>> {
+    let result = BlogFiles::query_by_id(id.0).await;
+
+    if let Ok(v) = result {
+        if let Some(blog_files) = v {
+            if let Some(url) = blog_files.file_url {
+                let config = config::this();
+                let mut file_upload_path_arr= (&config.file_upload_path).as_bytes();
+                let last_char = &file_upload_path_arr[file_upload_path_arr.len() - 1];
+                if cfg!(windows) {
+                    if *last_char == '\\' as u8 {
+                        file_upload_path_arr = &file_upload_path_arr[..file_upload_path_arr.len() - 1];
+                    }
+                } else {
+                    if *last_char == '/' as u8 {
+                        file_upload_path_arr = &file_upload_path_arr[..file_upload_path_arr.len() - 1];
+                    }
+                }
+                let file_upload_path = String::from_utf8_lossy(file_upload_path_arr).to_string();
+                let file_name = std::path::Path::new(&url);
+                if let Some(file_name) = file_name.file_name() {
+                    let path = std::path::Path::new(&file_upload_path);
+                    let buf = path.join(file_name);
+                    let path_str = buf.as_os_str().to_os_string();
+                    if let Err(e) = std::fs::remove_file(buf) {
+                        log::error!("remove file error, file path: {:?}, error info: {}", path_str, e);
+                    }
+                }
+            }
+        }
+    }
+
     BlogFiles::delete(id.0).await;
     Json(Results::success("删除成功!", String::new()))
 }

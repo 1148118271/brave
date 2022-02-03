@@ -25,7 +25,11 @@ pub async fn upload(mut data: Multipart) -> Json<Results<String>> {
 
     let file_uri = format!("{}{}", up, &file_name);
 
-    f.write_all(file_uri);
-
-    return Json(Results::success("ok", format!("/files/{}", file_name)))
+    match f.write_all(file_uri) {
+        Ok(_) => Json(Results::success("ok", format!("/files/{}", file_name))),
+        Err(e) => {
+            log::error!("文件上传失败, 失败信息为: {}", e);
+            Json(Results::error("文件上传失败！", String::new()))
+        }
+    }
 }
