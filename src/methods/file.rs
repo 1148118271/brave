@@ -2,8 +2,9 @@ use actix_multipart::Multipart;
 use actix_web::web::Json;
 use actix_web::post;
 use uuid::Uuid;
+use crate::config;
 use crate::util::multipart_file::MultipartFile;
-use crate::util::{ Results, config };
+use crate::util::Results;
 
 #[post("/fileUp")]
 pub async fn upload(mut data: Multipart) -> Json<Results<String>> {
@@ -14,7 +15,7 @@ pub async fn upload(mut data: Multipart) -> Json<Results<String>> {
         Some(f) => f
     };
 
-    let config = config::this();
+    let config = config::default();
     let up = &config.file_upload_path;
 
     let file_type = f.file_type();

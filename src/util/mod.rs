@@ -1,6 +1,6 @@
-pub use date_utils::{ get_date_time, get_date };
+pub use date_utils::{get_date, get_date_time};
 pub use paging::paging;
-pub use results::{ html, html_err };
+pub use results::{html, html_err};
 pub use head::head;
 pub use results::Results;
 pub use results::Paging;
@@ -13,15 +13,12 @@ pub use crate::head;
 mod results;
 mod paging;
 pub mod date_utils;
-pub mod tera;
-pub mod path;
 pub mod multipart_file;
-pub mod config;
-pub mod mysql;
 mod head;
 pub mod auth;
 pub mod session;
 mod params;
+pub mod base;
 
 #[macro_export]
 macro_rules! paging {

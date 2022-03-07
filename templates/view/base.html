@@ -1,102 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
-
-    <title> {% block title %}{% endblock title %} &nbsp; - &nbsp; 陈年旧事。</title>
-    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
 
     <!-- meta -->
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="baidu-site-verification" content="code-ZPTJy4ymGi" />
     <meta name="google-site-verification" content="7Omyz-CmGUhslCTvbSZ5au1KgCRR0B87Z9Xnd2TphHo" />
 
+    <title> {% block title %}{% endblock title %} &nbsp; - &nbsp; {{ blog_name }}</title>
+
+    {% if favicon_path %}
+    <link rel="shortcut icon" type="image/x-icon" href="{{ favicon_path }}" />
+    {% endif %}
+
     <!-- css -->
-    <link rel="stylesheet" href="/static/css/bootstrap.min_v3.css">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="/static/css/pace.css">
-    <link rel="stylesheet" href="/static/css/custom.css">
-    <link rel="stylesheet" href="/static/css/highlight_styles/github.min.css">
-
-    <!-- js -->
-    <script src="/static/js/jquery-3.4.1.min.js"></script>
-    <script src="/static/js/bootstrap.min_v3.js"></script>
-    <script src="/static/js/pace.min.js"></script>
-    <script src="/static/js/modernizr.custom.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.yestop.js"></script>
-
+    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/materialdesignicons.min.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/style.min.css" />
 
     {% block head %}{% endblock head %}
 
 </head>
 <body>
-<div class="container">
-    <header id="site-header">
-        <div class="row">
-            <div class="col-md-4 col-sm-5 col-xs-8">
-                <div class="logo">
-                    <h1><a href="/"><img src="/static/img/logo.png" style="height: 43px;" /></a></h1>
+<header class="lyear-header text-center" style="background-image:url({{ bg_path }});">
+    <div class="lyear-header-container">
+        <div class="lyear-mask"></div>
+        <h1 class="lyear-blogger pt-lg-4 mb-0"><a href="index.html">{{ blog_name }}</a></h1>
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-toggler" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+                <div class="lyear-hamburger">
+                    <div class="hamburger-inner"></div>
                 </div>
-            </div><!-- col-md-4 -->
-            <div class="col-md-8 col-sm-7 col-xs-4">
-                <nav class="main-nav" role="navigation">
-                    <div class="navbar-header">
-                        <button type="button" id="trigger-overlay" class="navbar-toggle">
-                            <span class="ion-navicon"></span>
-                        </button>
-                    </div>
+            </a>
 
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="cl-effect-11"><a href="/" data-hover="首页">首页</a></li>
-                            <li class="cl-effect-11"><a href="/blog/group" data-hover="分类">分类</a></li>
-                            <li class="cl-effect-11"><a href="/blog/friendLinks" data-hover="友链">友链</a></li>
-                            <li class="cl-effect-11"><a href="/blog/about" data-hover="关于我">关于我</a></li>
-                        </ul>
-                    </div><!-- /.navbar-collapse -->
-                </nav>
-                <div id="header-search-box">
-                    <a id="search-menu" href="javascript:void(0)"><span id="search-icon" class="ion-ios-search-strong"></span></a>
-                    <div id="search-form" class="search-form">
-                        <form role="search" method="get" id="searchform" action="javascript:void(0)">
-                            <input type="search" placeholder="搜索" required>
-                            <button type="submit"><span class="ion-ios-search-strong"></span></button>
-                        </form>
-                    </div>
+            <div id="navigation" class="collapse navbar-collapse flex-column">
+                <div class="profile-section pt-3 pt-lg-0">
+                    <img class="profile-image mb-3 rounded-circle mx-auto" src="{{ avatar_path }}" width="120" height="120" alt="笔下光年" >
+                    <div class="lyear-sentence mb-3">必须记住我们学习的时间是有限的。时间有限，不只由于人生短促，更由于人事纷繁。我们就应力求把我们所有的时间用去做最有益的事情。</div>
+                    <hr>
                 </div>
-            </div><!-- col-md-8 -->
-        </div>
-    </header>
-</div>
 
-{% block content %}{% endblock content %}
+                <ul class="navbar-nav flex-column text-center">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">技术</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">感悟</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">关于我</a>
+                    </li>
+                </ul>
 
-<footer id="site-footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <p class="copyright a2">&copy 2021 💓 由<a target="_blank" href="https://github.com/1148118271/brave"> project brave </a>支持. </p>
+                <div class="my-2 my-md-3">
+                    <form class="lyear-search-form form-inline justify-content-center pt-3">
+                        <input type="email" id="semail" name="semail1" class="form-control mr-md-1" placeholder="搜索关键词" />
+                    </form>
+                </div>
             </div>
-        </div>
+        </nav>
     </div>
-</footer>
+</header>
+<div class="lyear-wrapper">
+    <section class="mt-5 pb-5">
+        <div class="container">
 
+            <div class="row">
+                <!-- 文章列表 -->
+                {% block content %}{% endblock content %}
+                <!-- 内容 end -->
 
-<!-- Mobile Menu -->
-<div class="overlay overlay-hugeinc">
-    <button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>
-    <nav>
-        <ul>
-            <li><a href="/">首页</a></li>
-            <li><a href="/blog/group">分类</a></li>
-            <li><a href="/blog/friendLinks">友链</a></li>
-            <li><a href="/blog/about">关于我</a></li>
-        </ul>
-    </nav>
+                <!-- 侧边栏 -->
+                <div class="col-xl-4">
+                    <div class="lyear-sidebar">
+                        <!-- 热门文章 -->
+                        <aside class="widget widget-hot-posts">
+                            <div class="widget-title">热门文章</div>
+                            <ul>
+                                {% for h in hot_blog %}
+                                <li>
+                                    <a href="#">{{ h.title }}</a> <span>{{ h.publish_time }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </aside>
+
+                        <!-- 归档 -->
+                        <aside class="widget">
+                            <div class="widget-title">归档</div>
+                            <ul>
+                                {% for v in archive %}
+                                <li><a href="#">{{v.year}}年</a> ({{v.count}})</li>
+                                {% endfor %}
+                            </ul>
+                        </aside>
+
+                        <!-- 友链 -->
+                        <aside class="widget widget-hot-links">
+                            <div class="widget-title">友链</div>
+                            <ul>
+                                {% for l in links %}
+                                <li><a href="{{ l.link_url }}">{{ l.link_name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </aside>
+
+                        <!-- 标签 -->
+                        <aside class="widget widget-tag-cloud">
+                            <div class="widget-title">标签</div>
+                            <div class="tag-cloud">
+                                <a href="#" class="badge badge-light">php</a>
+                                <a href="#" class="badge badge-primary">苹果</a>
+                                <a href="#" class="badge badge-danger">比特币</a>
+                                <a href="#" class="badge badge-light">linux</a>
+                                <a href="#" class="badge badge-light">前端</a>
+                                <a href="#" class="badge badge-light">vue</a>
+                            </div>
+                        </aside>
+
+                    </div>
+                </div>
+                <!-- 侧边栏 end -->
+            </div>
+
+        </div>
+        <!-- end container -->
+    </section>
 </div>
-
-<script src="/static/js/script.js"></script>
-
+<script type="text/javascript" src="static/js/jquery.min.js"></script>
+<script type="text/javascript" src="static/js/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="static/js/main.min.js"></script>
 {% block script %}{% endblock script %}
 
 </body>

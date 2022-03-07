@@ -1,12 +1,13 @@
 use serde:: {
-    Serialize,
     Deserialize,
+    Serialize,
 };
 
-use rbatis::{ crud_table };
+use rbatis::crud_table;
 use rbatis::crud::CRUD;
 use rbatis::db::DBExecResult;
-use crate::util::{date_utils, mysql};
+use crate::mysql;
+use crate::util::date_utils;
 
 
 #[crud_table]
@@ -21,13 +22,15 @@ pub struct BlogLinks  {
 }
 
 impl BlogLinks {
-    pub async fn query_all_by_flag() -> rbatis::Result<Vec<Self>> {
-        let rb = mysql::this();
-        rb.fetch_list_by_column("flag", &["1".to_string()]).await
-    }
-
-    pub async fn save(&self) -> rbatis::Result<DBExecResult> {
-        let rb = mysql::this();
-        rb.save(self, &[]).await
+    pub async fn query_all_by_flag() -> Vec<Self> {
+        let rb = mysql::default().await;
+        let result: rbatis::Result<Vec<Self>> = rb.fetch_list_by_column("flag", &["1".to_string()]).await;
+        match result {
+            Ok(v) => v,
+            Err(e) => {
+                log::error!("查询友链异常, 异常信息为: {}", e);
+                vec![]
+            }
+        }
     }
 }
