@@ -3,6 +3,7 @@ use serde:: {
     Serialize,
     Deserialize,
 };
+use tera::Context;
 
 use super::paging;
 
@@ -71,19 +72,5 @@ pub fn html(string: String) -> HttpResponse {
 }
 
 pub fn html_err() -> HttpResponse {
-    let html_str =
-        r#"
-            <!DOCTYPE html>
-            <html lang="zh-CN">
-            <head>
-                <meta charset="UTF-8">
-                <title>页面异常</title>
-            </head>
-            <body>
-                <h1> 访问异常, 请联系管理员! </h1>
-            </body>
-            </html>
-
-        "#;
-    HttpResponse::Ok().content_type("text/html").body(html_str)
+    html!{"error/404".to_string(), &Context::new()}
 }

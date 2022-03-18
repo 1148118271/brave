@@ -18,7 +18,6 @@ mod head;
 pub mod auth;
 pub mod session;
 mod params;
-pub mod base;
 
 #[macro_export]
 macro_rules! paging {

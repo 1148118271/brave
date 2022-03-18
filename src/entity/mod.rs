@@ -1,6 +1,6 @@
 mod blog_user;
 mod blog_info;
-mod blog_group;
+mod blog_label;
 mod blog_details;
 mod blog_comments;
 mod blog_links;
@@ -10,9 +10,9 @@ mod blog_config;
 
 // pub use blog_user::BlogUser;
 pub use blog_info::BlogInfo;
-// pub use blog_group::BlogGroup;
-// pub use blog_details::BlogDetails;
-// pub use blog_comments::BlogComments;
+pub use blog_label::BlogLabel;
+pub use blog_details::BlogDetails;
+pub use blog_comments::BlogComments;
 pub use blog_links::BlogLinks;
 pub use blog_files::BlogFiles;
 pub use blog_config::BlogConfig;

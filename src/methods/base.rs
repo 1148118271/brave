@@ -1,22 +1,28 @@
 use tera::Context;
 use crate::{config, mysql};
-use crate::entity::{BlogConfig, BlogFiles, BlogInfo, BlogLinks};
+use crate::entity::{BlogConfig, BlogFiles, BlogInfo, BlogLabel, BlogLinks};
 use crate::util::html_err;
 
 pub async fn base_info(context: &mut Context) -> bool {
 
     // 个人配置信息
-    if !config_info(context).await { return false}
+    if !config_info(context).await { return false }
     // 热门博客
     hot_blog(context).await;
     // 归档
     archive(context).await;
     // 友链
     links(context).await;
+    // 标签
+    label(context).await;
 
     true
 }
 
+pub async fn label(context: &mut Context) {
+    let labels = BlogLabel::query_all().await;
+    context.insert("labels", &labels);
+}
 
 pub async fn links(context: &mut Context) {
     let blog_links = BlogLinks::query_all_by_flag().await;

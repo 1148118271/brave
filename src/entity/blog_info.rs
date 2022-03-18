@@ -11,7 +11,7 @@ use serde:: {
 use crate::mysql;
 use crate::util::date_utils;
 
-#[crud_table(table_columns:"id, title, user_account, publish_time, group_id, read_count, is_publish, create_time, update_time")]
+#[crud_table(table_columns:"id, title, user_account, publish_time, label_key, read_count, is_publish, create_time, update_time")]
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BlogInfo {
     // 主键
@@ -24,12 +24,8 @@ pub struct BlogInfo {
     pub user_name:          Option<String>,
     // 发布时间
     pub publish_time:       Option<date_utils::DateTimeUtil>,
-    // 分组关联id
-    pub group_id:           Option<usize>,
-    // 分组名称
-    pub group_name:         Option<String>,
-    // 评论次数
-    pub comment_count:      Option<u32>,
+    // 标签key
+    pub label_key:           Option<String>,
     // 阅读次数
     pub read_count:         Option<u32>,
     // 是否发布 0 未发布, 1 已发布
@@ -85,6 +81,21 @@ impl BlogInfo {
             Err(e) => {
                 log::error!("查询归档信息异常, 异常信息为: {}", e);
                 Vec::new()
+            }
+        }
+    }
+
+    pub async fn query_page(page_no: u64) -> Option<Page<Self>> {
+        let rb = mysql::default().await;
+        let page = PageRequest::new(page_no, 5);
+        let w = rb.new_wrapper()
+            .eq("is_publish","1");
+        let result: rbatis::Result<Page<Self>> = rb.fetch_page_by_wrapper(w, &page).await;
+        match result {
+            Ok(v) => Some(v),
+            Err(e) => {
+                log::error!("根据博客信息异常, 异常信息为: {}", e);
+                None
             }
         }
     }

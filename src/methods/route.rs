@@ -1,7 +1,8 @@
 use actix_files::Files;
-use actix_web::{App, HttpServer};
+use actix_web::{App, HttpResponse, HttpServer, web};
+use tera::Context;
 
-use crate::{config, methods, path};
+use crate::{config, html, methods, path};
 use crate::util::auth;
 
 pub async fn init() -> std::io::Result<()> {
@@ -11,11 +12,11 @@ pub async fn init() -> std::io::Result<()> {
         let static_path = format!("{}/static", p);
         // let favicon = format!("{}/static/img/favicon.ico", p);
         App::new()
-            .wrap(auth::Auth)
+           //  .wrap(auth::Auth)
             .service(Files::new("static/", &static_path))
             .service(Files::new("files/", &conf.file_upload_path))
             //.service(Files::new("favicon.ico", &favicon))
-            .service(methods::blog::index)
+            .service(methods::index::index)
             // .service(methods::blog::details)
             // .service(methods::blog::comment)
             // .service(methods::blog::comment_save)
@@ -44,5 +45,12 @@ pub async fn init() -> std::io::Result<()> {
             // .service(methods::admin::file::file_list)
             // .service(methods::admin::file::file_save)
             // .service(methods::admin::file::file_del)
+            .default_service(
+                web::to(default)
+            )
     }).bind(("0.0.0.0", config::default().port))?.run().await
+}
+
+pub async fn default() -> HttpResponse {
+    html!{"error/404".to_string(), &Context::new()}
 }

@@ -53,10 +53,12 @@ impl<S, B> Service for AuthMiddleware<S>
     type Future = Pin<Box<dyn Future<Output=Result<Self::Response, Self::Error>>>>;
 
     fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+        println!("poll_ready");
         self.service.poll_ready(cx)
     }
 
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
+        println!("call");
         let mut svc = self.service.clone();
         log::info!("[{} -> {}]", req.method().as_str(), req.path());
         Box::pin(async move {
