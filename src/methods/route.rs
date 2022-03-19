@@ -16,8 +16,11 @@ pub async fn init() -> std::io::Result<()> {
             .service(Files::new("static/", &static_path))
             .service(Files::new("files/", &conf.file_upload_path))
             //.service(Files::new("favicon.ico", &favicon))
+            .service(web::resource("/").to(home))
             .service(methods::index::index)
-            // .service(methods::blog::details)
+            .service(methods::details::details)
+            .service(methods::details::submit_comments)
+            .service(methods::timeline::timeline)
             // .service(methods::blog::comment)
             // .service(methods::blog::comment_save)
             // .service(methods::blog::group)
@@ -45,12 +48,16 @@ pub async fn init() -> std::io::Result<()> {
             // .service(methods::admin::file::file_list)
             // .service(methods::admin::file::file_save)
             // .service(methods::admin::file::file_del)
-            .default_service(
-                web::to(default)
-            )
+            // .default_service(
+            //     web::to(default)
+            // )
     }).bind(("0.0.0.0", config::default().port))?.run().await
 }
 
 pub async fn default() -> HttpResponse {
     html!{"error/404".to_string(), &Context::new()}
+}
+
+pub async fn home() -> HttpResponse {
+    html!{"home".to_string(), &Context::new()}
 }

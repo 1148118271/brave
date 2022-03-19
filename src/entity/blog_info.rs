@@ -65,6 +65,19 @@ impl BlogInfo {
     }
 
 
+    pub async fn archive_by_year(year: &str) -> Vec<Self> {
+        let rb = mysql::default().await;
+        let sql = format!(r"select * from blog_info where YEAR(publish_time) = '{}'", year);
+        let v: rbatis::Result<Vec<Self>> = rb.fetch(&sql, vec![]).await;
+        match v {
+            Ok(v) => v,
+            Err(e) => {
+                log::error!("根据年份查询归档信息异常, 异常信息为: {}", e);
+                Vec::new()
+            }
+        }
+    }
+
     pub async fn archive() -> Vec<Archive> {
         let rb = mysql::default().await;
         let v: rbatis::Result<Vec<Archive>> = rb.fetch(r#"
@@ -95,6 +108,21 @@ impl BlogInfo {
             Ok(v) => Some(v),
             Err(e) => {
                 log::error!("根据博客信息异常, 异常信息为: {}", e);
+                None
+            }
+        }
+    }
+
+
+    pub async fn query_by_id(id: usize) -> Option<Self> {
+        let rb = mysql::default().await;
+        let result: rbatis::Result<Option<Self>> =
+            rb.fetch_by_column("id", &id)
+                .await;
+        match result {
+            Ok(v) => v,
+            Err(e) => {
+                log::error!("根据id查询博客信息异常, 异常信息为: {}", e);
                 None
             }
         }

@@ -45,7 +45,7 @@
 
                 <ul class="navbar-nav flex-column text-center">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/">首页</a>
+                        <a class="nav-link" href="/index">首页</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.html">技术</a>
@@ -85,7 +85,7 @@
                             <ul>
                                 {% for h in hot_blog %}
                                 <li>
-                                    <a href="#">{{ h.title }}</a> <span>{{ h.publish_time }}</span>
+                                    <a href="/details?v={{h.id}}">{{ h.title }}</a> <span>{{ h.publish_time }}</span>
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -96,7 +96,7 @@
                             <div class="widget-title">归档</div>
                             <ul>
                                 {% for v in archive %}
-                                <li><a href="#">{{v.year}}年</a> ({{v.count}})</li>
+                                <li><a href="/timeline?t={{v.year}}">{{v.year}}年</a> ({{v.count}})</li>
                                 {% endfor %}
                             </ul>
                         </aside>
@@ -137,6 +137,7 @@
 <script type="text/javascript" src="static/js/jquery.nicescroll.min.js"></script>
 <script type="text/javascript" src="static/js/highlight/highlight.pack.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
 {% block script %}{% endblock script %}
 
 </body>

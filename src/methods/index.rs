@@ -29,6 +29,7 @@ use serde:: {
 
 #[derive(Serialize, Deserialize)]
 struct Result {
+    id:                 usize,
     title:              String,
     publish_time:       date_utils::DateTimeUtil,
     tags:               Vec<BlogLabel>,
@@ -38,25 +39,20 @@ struct Result {
     blog_details:       String
 }
 
-#[get("/")]
+#[get("/index")]
 pub async fn index(page: Query<HashMap<String, String>>) -> HttpResponse {
     let mut context = Context::new();
-    if !base::base_info(&mut context)
-        .await { return html_err() }
-
-    let vb = match page_method(page, &mut context)
-        .await {
+    // 获取博客初始化的信息
+    if !base::base_info(&mut context).await {
+        return html_err()
+    }
+    let vb = match page_method(page, &mut context).await {
         None => return html_err(),
         Some(v) => v,
     };
-
     let mut results = vec![];
-
     if !blog_info(vb, &mut results).await { return html_err() }
-
     context.insert("blog_infos", &results);
-
-    println!("ssss");
     html!{"view/index".to_string(), context}
 }
 
@@ -88,13 +84,12 @@ async fn blog_info(bs: Vec<BlogInfo>, results: &mut Vec<Result>) -> bool {
             }
         }
 
-        let blog_comments =
-            BlogComments::query_by_blog_id(v.id.unwrap_or(0))
-                .await;
+        let blog_comments = BlogComments::query_by_blog_id(v.id.unwrap_or(0)).await;
 
         results.push(
         Result {
-                title: v.title
+            id: v.id.unwrap_or(0),
+            title: v.title
                     .unwrap_or(String::new()),
 
                 publish_time: v.publish_time

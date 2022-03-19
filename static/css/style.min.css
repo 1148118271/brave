@@ -423,6 +423,45 @@ i[class*='mdi'] {
     font-weight: normal;
 }
 
+/* 时间线 */
+ul.timeline {
+    list-style: none;
+    padding-top: 1rem;
+}
+.timeline > li {
+    display: flex;
+}
+.timeline .line {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    padding: 0 1rem;
+}
+.timeline .line::before {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    content: "";
+    background: #bbb;
+}
+.timeline .line::after {
+    border-left: 1px solid #bbb;
+    content: "";
+    flex-grow: 1;
+    margin: 0.5rem 0;
+}
+.timeline .main {
+    display: flex;
+    flex-flow: column;
+}
+.timeline .main .time {
+    font-size: 0.8rem;
+    color: gray;
+}
+.timeline .main .title {
+    padding: 1rem 0;
+}
+
 /* --------------------------------- *
  * 响应式处理
  * --------------------------------- */
