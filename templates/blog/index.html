@@ -1,4 +1,4 @@
-{% extends "view/base.html" %}
+{% extends "blog/base.html" %}
 
 {% block title %}
 首页
@@ -10,7 +10,7 @@
 {% for bi in blog_infos %}
   <article class="lyear-arc">
     <div class="arc-header">
-      <h2 class="arc-title"><a href="/details?v={{bi.id}}">{{ bi.title }}</a></h2>
+      <h2 class="arc-title"><a href="details?v={{bi.id}}">{{ bi.title }}</a></h2>
       <ul class="arc-meta">
         <li><i class="mdi mdi-calendar"></i> {{ bi.publish_time }}</li>
         <li><i class="mdi mdi-tag-text-outline"></i>
@@ -22,8 +22,8 @@
             {% endif %}
           {% endfor %}
         </li>
-        <li><i class="mdi mdi-comment-multiple-outline"></i> <a href="#">{{ bi.comment_count }} 评论</a></li>
-        <li><i class="mdi mdi-eye-outline"></i> <a href="#">{{ bi.read_count }} 阅读</a></li>
+        <li><i class="mdi mdi-comment-multiple-outline"></i> {{ bi.comment_count }} 评论</li>
+        <li><i class="mdi mdi-eye-outline"></i>{{ bi.read_count }} 阅读</li>
       </ul>
     </div>
 
@@ -39,15 +39,15 @@
   <div class="row">
     <div class="col-lg-12">
       <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="/index?page={{page_no - 1}}"><i class="mdi mdi-chevron-left"></i></a></li>
+        <li class="page-item"><a class="page-link" href="index?page={{page_no - 1}}"><i class="mdi mdi-chevron-left"></i></a></li>
         {% for pn in page_num %}
         <li class="page-item {% if page_no == pn %}active{% endif %}">
-          <a class="page-link" href="/index?page={{pn}}">
+          <a class="page-link" href="index?page={{pn}}">
             {{ pn }}
           </a>
         </li>
         {% endfor %}
-        <li class="page-item"><a class="page-link" href="/index?page={{page_no + 1}}"><i class="mdi mdi-chevron-right"></i></a></li>
+        <li class="page-item"><a class="page-link" href="index?page={{page_no + 1}}"><i class="mdi mdi-chevron-right"></i></a></li>
       </ul>
     </div>
   </div>

@@ -64,10 +64,10 @@ pub async fn config_info(context: &mut Context) -> bool {
             .await;
 
     let avatar_path = match avatar_path {
-        None => "static/images/lyear.png".to_string(),
+        None => "/static/images/blog/avatar.jpg".to_string(),
         Some(v) => {
             match v.file_url {
-                None => "static/images/lyear.png".to_string(),
+                None => "/static/images/blog/avatar.jpg".to_string(),
                 Some(v) => {
                     format!("{}/files/{}", &dn, v)
                 }
@@ -77,23 +77,13 @@ pub async fn config_info(context: &mut Context) -> bool {
 
     context.insert("avatar_path", &avatar_path);
 
-    if let Some(t) =
-    BlogFiles::query_by_id(blog_config.favicon_path.unwrap_or(0))
-        .await
-    {
-        if let Some(v) = t.file_url {
-
-            let favicon_path = format!("{}/{}", dn, v);
-            context.insert("favicon_path", &favicon_path);
-        }
-    }
 
     let bg_path = BlogFiles::query_by_id(blog_config.bg_path.unwrap_or(0)).await;
     let bg_path = match bg_path {
-        None => "static/images/left-bg.jpg".to_string(),
+        None => "/static/images/blog/bg1.jpg".to_string(),
         Some(v) => {
             match v.file_url {
-                None => "static/images/left-bg.jpg".to_string(),
+                None => "/static/images/blog/bg1.jpg".to_string(),
                 Some(v) => {
                     format!("{}/files/{}", &dn, v)
                 }

@@ -1,4 +1,4 @@
-{% extends "view/base.html" %}
+{% extends "blog/base.html" %}
 
 {% block title %}
 首页
@@ -15,7 +15,7 @@
         <div class="line"></div>
         <section class="main">
           <time class="time">{{b.publish_time}}</time>
-          <p class="title"><a href="/details?v={{b.id}}">{{b.title}}</a></p>
+          <p class="title"><a href="details?v={{b.id}}">{{b.title}}</a></p>
         </section>
       </li>
       {% endfor %}

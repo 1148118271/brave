@@ -10,7 +10,7 @@ use crate::methods::base;
 use crate::util::html_err;
 use crate::html;
 
-#[get("/timeline")]
+#[get("blog/timeline")]
 pub async fn timeline(params: Query<HashMap<String, String>>) -> HttpResponse {
 
     let mut context = Context::new();
@@ -25,5 +25,5 @@ pub async fn timeline(params: Query<HashMap<String, String>>) -> HttpResponse {
         }
     }
 
-    html!{"view/timeline".to_string(), &context}
+    html!{"blog/timeline".to_string(), &context}
 }

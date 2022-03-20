@@ -13,7 +13,7 @@ use crate::methods::base;
 use crate::util::{html_err, Results};
 
 
-#[post("/comment")]
+#[post("blog/comment")]
 pub async fn submit_comments(params: Form<BlogComments>) -> Json<Results<String>> {
     let comment = match &params.comment {
         None => false,
@@ -42,7 +42,7 @@ pub async fn submit_comments(params: Form<BlogComments>) -> Json<Results<String>
 
 }
 
-#[get("/details")]
+#[get("blog/details")]
 pub async fn details(params: Query<HashMap<String, usize>>) -> HttpResponse {
     let mut context = Context::new();
     // 获取base信息
@@ -71,7 +71,7 @@ pub async fn details(params: Query<HashMap<String, usize>>) -> HttpResponse {
     // 博客详情
     get_details(blog_id, rc.clone()).await;
 
-    html!{"view/details".to_string(), &*rc.borrow()}
+    html!{"blog/details".to_string(), &*rc.borrow()}
 }
 
 /// 获取博客详情

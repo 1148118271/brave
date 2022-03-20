@@ -39,7 +39,7 @@ struct Result {
     blog_details:       String
 }
 
-#[get("/index")]
+#[get("blog/index")]
 pub async fn index(page: Query<HashMap<String, String>>) -> HttpResponse {
     let mut context = Context::new();
     // 获取博客初始化的信息
@@ -53,7 +53,7 @@ pub async fn index(page: Query<HashMap<String, String>>) -> HttpResponse {
     let mut results = vec![];
     if !blog_info(vb, &mut results).await { return html_err() }
     context.insert("blog_infos", &results);
-    html!{"view/index".to_string(), context}
+    html!{"blog/index".to_string(), context}
 }
 
 

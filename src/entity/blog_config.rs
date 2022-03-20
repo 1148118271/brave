@@ -13,7 +13,6 @@ use crate::mysql;
 pub struct BlogConfig {
     pub id                          : Option<usize>,    //
     pub avatar_path                 : Option<usize>, // '头像路径',
-    pub favicon_path                : Option<usize>, // '网站图标地址',
     pub bg_path                     : Option<usize>, // '背景地址',
     pub blog_name                   : Option<String>, // '博客名称',
     pub blog_brief_introduction     : Option<String>, // '博客简介'
@@ -26,7 +25,6 @@ impl BlogConfig {
         BlogConfig {
             id: Some(0),
             avatar_path: Some(0),
-            favicon_path: Some(0),
             bg_path: Some(0),
             blog_name: Some("".to_string()),
             blog_brief_introduction: Some("".to_string()),

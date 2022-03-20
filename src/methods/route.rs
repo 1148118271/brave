@@ -15,8 +15,10 @@ pub async fn init() -> std::io::Result<()> {
            //  .wrap(auth::Auth)
             .service(Files::new("static/", &static_path))
             .service(Files::new("files/", &conf.file_upload_path))
+            .service(Files::new("/favicon.ico", "static/images/favicon.ico"))
             //.service(Files::new("favicon.ico", &favicon))
             .service(web::resource("/").to(home))
+            .service(web::resource("/about").to(about))
             .service(methods::index::index)
             .service(methods::details::details)
             .service(methods::details::submit_comments)
@@ -60,4 +62,7 @@ pub async fn default() -> HttpResponse {
 
 pub async fn home() -> HttpResponse {
     html!{"home".to_string(), &Context::new()}
+}
+pub async fn about() -> HttpResponse {
+    html!{"about".to_string(), &Context::new()}
 }
