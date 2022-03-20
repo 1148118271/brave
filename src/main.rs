@@ -1,7 +1,6 @@
 mod methods;
 mod util;
 mod entity;
-mod test;
 mod path;
 mod config;
 mod mysql;

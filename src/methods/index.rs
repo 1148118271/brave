@@ -1,31 +1,23 @@
 use std::collections::HashMap;
-use std::ops::DerefMut;
 use std::str::FromStr;
+
 use actix_web::{
     get,
     HttpResponse,
-    post
 };
-use actix_web::test::config;
-use actix_web::web::{Form, Json, Path, Query};
+use actix_web::web::Query;
 use bson::DateTime;
-use chrono::Local;
-use rbatis::Page;
-use serde_json::Value;
-use tera::Context;
-use crate::config::Config;
-use crate::entity::{BlogComments, BlogConfig, BlogDetails, BlogFiles, BlogInfo, BlogLabel};
-
-
-use crate::{config, html};
-use crate::methods::base;
-use crate::util::{date_utils, html, html_err, Results};
-use crate::util::date_utils::DateTimeUtil;
-
 use serde:: {
     Deserialize,
     Serialize,
 };
+use tera::Context;
+
+use crate::entity::{BlogComments, BlogDetails, BlogInfo, BlogLabel};
+use crate::html;
+use crate::methods::base;
+use crate::util::{date_utils, html_err};
+use crate::util::date_utils::DateTimeUtil;
 
 #[derive(Serialize, Deserialize)]
 struct Result {
@@ -52,6 +44,7 @@ pub async fn index(page: Query<HashMap<String, String>>) -> HttpResponse {
     };
     let mut results = vec![];
     if !blog_info(vb, &mut results).await { return html_err() }
+    results.reverse();
     context.insert("blog_infos", &results);
     html!{"blog/index".to_string(), context}
 }
@@ -110,7 +103,7 @@ async fn page_method(page: Query<HashMap<String, String>>,
                      context: &mut Context) -> Option<Vec<BlogInfo>>
 {
     let ps = String::from("1");
-    let page = page.get("page")
+    let page = page.get("p")
         .unwrap_or(&ps);
     let mut page = u64::from_str(page)
         .unwrap_or(1);

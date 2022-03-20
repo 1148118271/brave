@@ -1,11 +1,9 @@
 use actix_web::HttpResponse;
 use serde:: {
-    Serialize,
     Deserialize,
+    Serialize,
 };
 use tera::Context;
-
-use super::paging;
 
 #[derive(Serialize, Deserialize)]
 pub struct Results<T> {
@@ -32,24 +30,6 @@ impl<T> Results<T> {
         }
     }
 
-}
-
-
-#[derive(Serialize, Deserialize)]
-pub struct Paging<T> {
-    pub rows: Vec<T>,
-    pub total: usize
-}
-
-impl<T: Clone> Paging<T> {
-    pub fn new(page_num: isize, page_size: isize, data: &Vec<T>) -> Paging<T> {
-        let total = data.len();
-        let rows = paging!(page_num, page_size, data);
-        Paging {
-            rows,
-            total
-        }
-    }
 }
 
 #[macro_export]

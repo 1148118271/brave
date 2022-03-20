@@ -1,7 +1,7 @@
 use tera::Context;
-use crate::{config, mysql};
+
+use crate::config;
 use crate::entity::{BlogConfig, BlogFiles, BlogInfo, BlogLabel, BlogLinks};
-use crate::util::html_err;
 
 pub async fn base_info(context: &mut Context) -> bool {
 

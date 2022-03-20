@@ -1,17 +1,18 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
+
 use actix_web::{
-    HttpResponse,
-    get, post
+    get,
+    HttpResponse, post
 };
-use actix_web::web::{Form, Json, Payload, Query};
+use actix_web::web::{Form, Json, Query};
 use tera::Context;
+
 use crate::entity::{BlogComments, BlogDetails, BlogInfo, BlogLabel};
 use crate::html;
 use crate::methods::base;
 use crate::util::{html_err, Results};
-
 
 #[post("blog/comment")]
 pub async fn submit_comments(params: Form<BlogComments>) -> Json<Results<String>> {
