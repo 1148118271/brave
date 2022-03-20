@@ -16,8 +16,8 @@ body {
 }
 a {
     color: #4d5259;
-    text-decoration: none;
-	-webkit-transition: color 0.5s, background-color 0.5s;
+    text-decoration: underline;
+    -webkit-transition: color 0.5s, background-color 0.5s;
 	-o-transition: color 0.5s, background-color 0.5s;
 	transition: color 0.5s, background-color 0.5s;
 }
@@ -310,7 +310,6 @@ i[class*='mdi'] {
 
 .widget-hot-links a {
     color: #b96262;
-    text-decoration: underline;
 }
 
 /* 文章简介 */

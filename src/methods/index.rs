@@ -128,6 +128,8 @@ async fn page_method(page: Query<HashMap<String, String>>,
         }
     }
 
+    // 所有页数
+    context.insert("pages", &page_info.pages);
     // 当前是第几页
     context.insert("page_no", &page_info.page_no);
 
