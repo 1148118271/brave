@@ -1,10 +1,10 @@
 use rbatis::crud::CRUD;
 use rbatis::crud_table;
-use rbatis::db::DBExecResult;
 use serde:: {
     Deserialize,
     Serialize,
 };
+
 use crate::mysql;
 use crate::util::date_utils;
 
@@ -18,15 +18,6 @@ pub struct BlogFiles {
 }
 
 impl BlogFiles {
-    pub async fn save(&self) -> rbatis::Result<DBExecResult> {
-        let rb = mysql::default().await;
-        rb.save(self, &[]).await
-    }
-
-    pub async fn query_all() -> rbatis::Result<Vec<Self>> {
-        let rb = mysql::default().await;
-        rb.fetch_list().await
-    }
 
     pub async fn query_by_id(id: usize) -> Option<Self> {
         let rb = mysql::default().await;
@@ -40,8 +31,4 @@ impl BlogFiles {
         }
     }
 
-    pub async fn delete(id: usize) {
-        let rb = mysql::default().await;
-        rb.remove_by_wrapper::<Self>(rb.new_wrapper().set_dml("delete").eq("id",&id)).await;
-    }
 }

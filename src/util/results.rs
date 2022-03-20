@@ -43,7 +43,7 @@ macro_rules! html {
         }
         let t = crate::tera::default();
         let string = t.render(&hn, &$c).unwrap();
-        actix_web::HttpResponse::Ok().content_type("text/html").body(string)
+         crate::util::html(string)
     };
 }
 

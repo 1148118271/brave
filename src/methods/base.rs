@@ -40,7 +40,7 @@ pub async fn hot_blog(context: &mut Context) {
 }
 
 pub async fn config_info(context: &mut Context) -> bool {
-    let mut result = BlogConfig::query().await;
+    let result = BlogConfig::query().await;
     let result = match result {
         Ok(v) => v,
         Err(e) => {

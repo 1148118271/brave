@@ -1,29 +1,21 @@
 use std::fmt::Formatter;
+use std::ops::{Deref, DerefMut};
+use std::str::FromStr;
 
+use bson::{Bson, DateTime};
+use chrono::{Local, NaiveDateTime};
+use serde::{Deserializer, Serializer};
+use serde::de::Error;
 
 // 日期 + 时间
 pub const FMT_Y_M_D_H_M_S: &str = "%Y-%m-%d %H:%M:%S";
 
-// 日期
-pub const FMT_Y_M_D: &str = "%Y-%m-%d";
 
 pub fn get_date_time() -> String {
     let date_time = Local::now();
     date_time.format(FMT_Y_M_D_H_M_S).to_string()
 }
 
-pub fn get_date() -> String {
-    let date_time = Local::now();
-    date_time.format(FMT_Y_M_D).to_string()
-}
-
-
-use std::ops::{Deref, DerefMut};
-use std::str::FromStr;
-use bson::{Bson, DateTime};
-use chrono::{Local, NaiveDateTime};
-use serde::{Deserializer, Serializer};
-use serde::de::Error;
 
 /// Rbatis DateTime
 #[derive(Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd)]
