@@ -16,8 +16,8 @@ body {
 }
 a {
     color: #4d5259;
-    text-decoration: underline;
-    -webkit-transition: color 0.5s, background-color 0.5s;
+    text-decoration: none;
+	-webkit-transition: color 0.5s, background-color 0.5s;
 	-o-transition: color 0.5s, background-color 0.5s;
 	transition: color 0.5s, background-color 0.5s;
 }
@@ -230,6 +230,18 @@ i[class*='mdi'] {
     font-size: 24px;
     margin: 0 0 10px;
 }
+
+.arc-title a {
+    text-decoration: underline;
+}
+
+.arc-title a:hover,
+.arc-title a:active,
+.arc-title a:focus {
+    outline: none;
+    text-decoration: none;
+}
+
 .arc-meta {
     list-style: none;
     padding: 0;
@@ -310,6 +322,7 @@ i[class*='mdi'] {
 
 .widget-hot-links a {
     color: #b96262;
+    text-decoration: underline;
 }
 
 /* 文章简介 */
@@ -328,6 +341,9 @@ i[class*='mdi'] {
 /* 文章详细 */
 .lyear-arc-detail {
     font-size: 16px;
+}
+.lyear-arc-detail a {
+    text-decoration: underline;
 }
 .lyear-arc-detail h1,
 .lyear-arc-detail h2,
