@@ -60,6 +60,10 @@ pub async fn details(params: Query<HashMap<String, usize>>) -> HttpResponse {
         return html_err()
     }
     let blog_id = *(blog_id.unwrap());
+
+    // 阅读次数加1
+    BlogInfo::add_read_count(blog_id).await;
+
     // 标题, 时间, 查看次数
     let (flag, tags) = title_and_publish_time(blog_id, rc.clone()).await;
     if !flag {

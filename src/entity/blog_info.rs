@@ -1,3 +1,4 @@
+use bson::Bson;
 use rbatis::{crud_table, Page, PageRequest};
 use rbatis::crud::CRUD;
 use rbatis::executor::Executor;
@@ -124,5 +125,14 @@ impl BlogInfo {
                 None
             }
         }
+    }
+
+    pub async fn add_read_count(id: usize) {
+        let rb = mysql::default().await;
+        let result:rbatis::Result<Option<u8>> = rb.fetch("update blog_info set read_count = read_count+1 where id = ?",
+                              vec![Bson::Int64(id as i64)]).await;
+       if let Err(e) = result {
+           log::error!("查看次数增加时异常, 异常信息为: {}", e)
+       }
     }
 }
