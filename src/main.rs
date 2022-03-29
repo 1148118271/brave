@@ -13,4 +13,5 @@ async fn main() {
     log4rs::init_file(path, Default::default()).unwrap();
     log::info!("开始加载项目, 时间为:[{}]...", util::get_date_time());
     methods::init().await.expect("方法初始化时异常！");
+
 }
