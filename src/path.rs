@@ -11,11 +11,11 @@ pub fn default() -> &'static String {
             if args.len() >= 2 {
                 path = Path::new(args[1].as_str())
             } else {
-                path = Path::new("./");
+                path = Path::new(".");
             }
             let buf = path.canonicalize().expect("路径加载异常！");
-            let x = buf.to_str().unwrap();
-            PATH = Some(x.to_string())
+            let x = buf.into_os_string().into_string().unwrap();
+            PATH = Some(x)
         }
         if let Some(v) = &PATH {
             return v;

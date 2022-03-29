@@ -13,3 +13,14 @@ macro_rules! head {
         head()
     };
 }
+
+#[macro_export]
+macro_rules! os_path {
+    ($($x:expr),*) => {{
+        let mut buf = std::path::PathBuf::new();
+        $(
+            buf = buf.join(std::path::Path::new($x));
+        )*
+        buf.into_os_string().into_string().unwrap()
+    }};
+}

@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::Read;
 use serde::Deserialize;
-use crate::path;
+use crate::{os_path, path};
 
 
 static mut CONFIG: Option<Config> = None;
@@ -18,7 +18,7 @@ pub fn default() -> &'static Config {
     unsafe {
         if CONFIG.is_none() {
             let p = path::default();
-            let path = format!("{}/conf/blogs.toml", p);
+            let path = os_path![p, "conf", "blogs.toml"];
             let mut file = match File::open(path) {
                 Ok(f) => f,
                 Err(e) => panic!("打开文件异常, 异常信息为: {}", e)

@@ -2,15 +2,15 @@ use actix_files::Files;
 use actix_web::{App, HttpResponse, HttpServer, web};
 use tera::Context;
 
-use crate::{config, html, methods, path};
+use crate::{config, html, methods, os_path, path};
 
 pub async fn init() -> std::io::Result<()> {
     HttpServer::new(|| {
         let p = path::default();
         let conf = config::default();
-        let static_path = format!("{}/static", p);
+        let static_path = os_path!(p, "static");
         App::new()
-            .service(Files::new("static/", &static_path))
+            .service(Files::new("static/", static_path))
             .service(Files::new("files/", &conf.file_upload_path))
             .service(web::resource("/").to(home))
             .service(web::resource("/about").to(about))
