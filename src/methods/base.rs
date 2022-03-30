@@ -1,12 +1,73 @@
+use std::collections::HashMap;
+use std::ops::Add;
+use chrono::{Local, NaiveDateTime};
 use tera::Context;
 
 use crate::config;
 use crate::entity::{BlogConfig, BlogFiles, BlogInfo, BlogLabel, BlogLinks};
+use crate::util::date_utils;
 
-pub async fn base_info(context: &mut Context) -> bool {
+/// 默认昵称
+const DEFAULT_BLOG_NAME: &str = "陈年旧事。";
+/// 默认简介
+const DEFAULT_BLOG_BRIEF_INTRODUCTION: &str = "";
+/// 默认头像地址
+const DEFAULT_AVATAR_PATH: &str = "/static/images/blog/avatar.jpg";
+/// 默认背景图片
+const DEFAULT_BG_PATH: &str = "/static/images/blog/bg1.jpg";
 
+struct BaseInfo {
+    context: Context,
+    time: chrono::NaiveDateTime
+}
+
+impl BaseInfo {
+    async fn new() -> Self {
+        let mut info = BaseInfo {
+            context: Context::new(),
+            time:  chrono::Local::now().naive_local()
+        };
+        base_info(&mut info.context).await;
+        info
+    }
+    async fn over_one_day(&mut self) {
+        let current_time = chrono::Local::now().naive_local();
+        let time = self.time + chrono::Duration::days(1);
+        if time < current_time {
+            return;
+        }
+        self.time = current_time;
+        base_info(&mut self.context).await
+    }
+}
+
+static mut BASE_INFO: Option<BaseInfo> = None;
+
+
+pub async fn init() {
+    unsafe {
+        if BASE_INFO.is_none() {
+            BASE_INFO = Some(BaseInfo::new())
+        }
+    }
+}
+
+pub async fn get_base_context() -> Context {
+    unsafe {
+        if BASE_INFO.is_none() {
+            BASE_INFO = Some(BaseInfo::new());
+            return BASE_INFO.as_ref().unwrap().context.clone();
+        }
+        BASE_INFO.as_mut().unwrap().over_one_day();
+        BASE_INFO.as_ref().unwrap().context.clone()
+    }
+
+}
+
+
+pub async fn base_info(context: &mut Context) {
     // 个人配置信息
-    if !config_info(context).await { return false }
+    config_info(context).await;
     // 热门博客
     hot_blog(context).await;
     // 归档
@@ -15,8 +76,6 @@ pub async fn base_info(context: &mut Context) -> bool {
     links(context).await;
     // 标签
     label(context).await;
-
-    true
 }
 
 pub async fn label(context: &mut Context) {
@@ -39,65 +98,54 @@ pub async fn hot_blog(context: &mut Context) {
     context.insert("hot_blog",&hot_blog);
 }
 
-pub async fn config_info(context: &mut Context) -> bool {
+pub async fn config_info(context: &mut Context) {
     let result = BlogConfig::query().await;
-    let result = match result {
-        Ok(v) => v,
-        Err(e) => {
-            log::error!("获取博客初始信息异常, 异常信息为: {}", e);
-            return false
-        }
-    };
 
+    // 头像
+    context.insert("avatar_path", DEFAULT_AVATAR_PATH);
+    // 背景
+    context.insert("bg_path", DEFAULT_BG_PATH);
+    // 昵称
+    context.insert("blog_name", DEFAULT_BLOG_NAME);
+    // 简介
+    context.insert("blog_brief_introduction", DEFAULT_BLOG_BRIEF_INTRODUCTION);
+
+    // 获取初始化配置
     let blog_config = match result {
-        None => BlogConfig::default(),
-        Some(v) => v,
+        None => return,
+        Some(v) => v
     };
 
-
+    // 文件配置路径
     let c = config::default();
     let dn = &c.domain_name;
 
-
-    let avatar_path =
-        BlogFiles::query_by_id(blog_config.avatar_path.unwrap_or(0))
-            .await;
-
-    let avatar_path = match avatar_path {
-        None => "/static/images/blog/avatar.jpg".to_string(),
-        Some(v) => {
-            match v.file_url {
-                None => "/static/images/blog/avatar.jpg".to_string(),
-                Some(v) => {
-                    format!("{}/files/{}", &dn, v)
-                }
-            }
+    // 获取头像
+    let avatar_path_file = BlogFiles::query_by_id(blog_config.avatar_path.unwrap_or(0)).await;
+    if let Some(v) = avatar_path_file {
+        if let Some(v) = v.file_url {
+            let avatar_path_url = format!("{}/files/{}", &dn, v);
+            context.insert("avatar_path", &avatar_path_url);
         }
-    };
+    }
 
-    context.insert("avatar_path", &avatar_path);
-
-
+    // 获取背景
     let bg_path = BlogFiles::query_by_id(blog_config.bg_path.unwrap_or(0)).await;
-    let bg_path = match bg_path {
-        None => "/static/images/blog/bg1.jpg".to_string(),
-        Some(v) => {
-            match v.file_url {
-                None => "/static/images/blog/bg1.jpg".to_string(),
-                Some(v) => {
-                    format!("{}/files/{}", &dn, v)
-                }
-            }
+    if let Some(v) = bg_path {
+        if let Some(v) = v.file_url {
+            let bg_path_url = format!("{}/files/{}", &dn, v);
+            context.insert("bg_path", &bg_path_url);
         }
-    };
+    }
 
-    context.insert("bg_path", &bg_path);
+    // 昵称
+    if let Some(v) = blog_config.blog_name {
+        context.insert("blog_name", &v);
+    }
 
-    let blog_name = blog_config.blog_name.unwrap_or("陈年旧事。".to_string());
-    context.insert("blog_name", &blog_name);
+    // 简介
+    if let Some(v) = blog_config.blog_brief_introduction {
+        context.insert("blog_brief_introduction", &v);
+    }
 
-    let blog_brief_introduction = blog_config.blog_brief_introduction.unwrap_or("".to_string());
-    context.insert("blog_brief_introduction", &blog_brief_introduction);
-
-    true
 }

@@ -32,8 +32,15 @@ impl BlogConfig {
         }
     }
 
-    pub async fn query() -> rbatis::Result<Option<Self>> {
+    pub async fn query() -> Option<Self> {
         let rb = mysql::default().await;
-        rb.fetch_by_column("is_use", &1).await
+        let result: rbatis::Result<Option<Self>> = rb.fetch_by_column("is_use", &1).await;
+        match result {
+            Ok(v) => v,
+            Err(e) => {
+                log::error!("获取博客初始信息异常, 异常信息为: {}", e);
+                None
+            }
+        }
     }
 }
