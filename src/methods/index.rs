@@ -33,11 +33,9 @@ struct Result {
 
 #[get("blog/index")]
 pub async fn index(page: Query<HashMap<String, String>>) -> HttpResponse {
-    let mut context = Context::new();
     // 获取博客初始化的信息
-    if !base::base_info(&mut context).await {
-        return html_err()
-    }
+    let mut context = base::get_base_context().await;
+
     let vb = match page_method(page, &mut context).await {
         None => return html_err(),
         Some(v) => v,

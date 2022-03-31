@@ -45,11 +45,7 @@ pub async fn submit_comments(params: Form<BlogComments>) -> Json<Results<String>
 
 #[get("blog/details")]
 pub async fn details(params: Query<HashMap<String, usize>>) -> HttpResponse {
-    let mut context = Context::new();
-    // 获取base信息
-    if !base::base_info(&mut context).await {
-        return html_err()
-    }
+    let context = base::get_base_context().await;
 
     let rc = Rc::new(RefCell::new(context));
 

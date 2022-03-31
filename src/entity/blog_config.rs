@@ -20,18 +20,6 @@ pub struct BlogConfig {
 }
 
 impl BlogConfig {
-
-    pub fn default() -> BlogConfig {
-        BlogConfig {
-            id: Some(0),
-            avatar_path: Some(0),
-            bg_path: Some(0),
-            blog_name: Some("".to_string()),
-            blog_brief_introduction: Some("".to_string()),
-            is_use: Some(true)
-        }
-    }
-
     pub async fn query() -> Option<Self> {
         let rb = mysql::default().await;
         let result: rbatis::Result<Option<Self>> = rb.fetch_by_column("is_use", &1).await;

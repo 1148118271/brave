@@ -1,11 +1,7 @@
-use std::collections::HashMap;
-use std::ops::Add;
-use chrono::{Local, NaiveDateTime};
 use tera::Context;
 
 use crate::config;
 use crate::entity::{BlogConfig, BlogFiles, BlogInfo, BlogLabel, BlogLinks};
-use crate::util::date_utils;
 
 /// 默认昵称
 const DEFAULT_BLOG_NAME: &str = "陈年旧事。";
@@ -44,21 +40,13 @@ impl BaseInfo {
 static mut BASE_INFO: Option<BaseInfo> = None;
 
 
-pub async fn init() {
-    unsafe {
-        if BASE_INFO.is_none() {
-            BASE_INFO = Some(BaseInfo::new())
-        }
-    }
-}
-
 pub async fn get_base_context() -> Context {
     unsafe {
         if BASE_INFO.is_none() {
-            BASE_INFO = Some(BaseInfo::new());
+            BASE_INFO = Some(BaseInfo::new().await);
             return BASE_INFO.as_ref().unwrap().context.clone();
         }
-        BASE_INFO.as_mut().unwrap().over_one_day();
+        BASE_INFO.as_mut().unwrap().over_one_day().await;
         BASE_INFO.as_ref().unwrap().context.clone()
     }
 
