@@ -13,7 +13,7 @@ use serde:: {
 };
 use tera::Context;
 
-use crate::entity::{BlogComments, BlogDetails, BlogInfo, BlogLabel};
+use crate::entity::{BlogComments, BlogInfo, BlogLabel, BlogPost};
 use crate::html;
 use crate::methods::base;
 use crate::util::{date_utils, html_err};
@@ -31,7 +31,7 @@ struct Result {
     blog_details:       String
 }
 
-#[get("blog/index")]
+#[get("/")]
 pub async fn index(page: Query<HashMap<String, String>>) -> HttpResponse {
     // 获取博客初始化的信息
     let mut context = base::get_base_context().await;
@@ -44,14 +44,14 @@ pub async fn index(page: Query<HashMap<String, String>>) -> HttpResponse {
     if !blog_info(vb, &mut results).await { return html_err() }
     results.reverse();
     context.insert("blog_infos", &results);
-    html!{"blog/index".to_string(), context}
+    html!{"index".to_string(), context}
 }
 
 
 async fn blog_info(bs: Vec<BlogInfo>, results: &mut Vec<Result>) -> bool {
     for v in bs {
         // 博客详情
-        let bd = match BlogDetails::query_by_blog_info_id(
+        let bd = match BlogPost::query_by_blog_info_id(
             v.id.unwrap_or(0))
             .await {
             None => return false,
@@ -90,7 +90,7 @@ async fn blog_info(bs: Vec<BlogInfo>, results: &mut Vec<Result>) -> bool {
                 comment_count: blog_comments.len() as u64,
                 comment: blog_comments,
                 read_count: v.read_count.unwrap_or(0) as u64,
-                blog_details: bd.details.unwrap_or(String::new())
+                blog_details: bd.post_html.unwrap_or(String::new())
             }
         )
     }

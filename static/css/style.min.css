@@ -7,13 +7,29 @@
 /* --------------------------------- *
  * 重设样式
  * --------------------------------- */
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
     font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
     font-size: 14px;
     line-height: 1.7;
     background-color: #fff;
     color: #4d5259;
+    margin-bottom: 60px;
 }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 50px;
+}
+
 a {
     color: #4d5259;
     text-decoration: none;
@@ -84,11 +100,8 @@ i[class*='mdi'] {
  * 左侧
  * --------------------------------- */
 .lyear-header {
-	position: fixed;
 	left: 0;
 	top: 0;
-	height: 100vh;
-	width: 360px;
     background-repeat: no-repeat;
     background-color: #3d3d3d;
     background-size: cover;
@@ -215,7 +228,6 @@ i[class*='mdi'] {
  * 右侧
  * --------------------------------- */
 .lyear-wrapper {
-    margin-left: 360px;
     padding: 1.5rem 3rem 0;
     height: 100%;
 }

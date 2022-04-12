@@ -4,6 +4,6 @@ mod route;
 
 pub mod index;
 pub mod base;
-pub mod details;
+pub mod post;
 pub mod timeline;
 

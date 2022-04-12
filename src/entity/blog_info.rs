@@ -10,15 +10,13 @@ use serde:: {
 use crate::mysql;
 use crate::util::date_utils;
 
-#[crud_table(table_columns:"id, title, user_account, publish_time, label_key, read_count, is_publish, create_time, update_time")]
+#[crud_table(table_columns:"id, title, publish_time, label_key, read_count, is_publish, create_time, update_time")]
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct BlogInfo {
     // 主键
     pub id:                 Option<usize>,
     // 标题
     pub title:              Option<String>,
-    // 用户账号
-    pub user_account:       Option<String>,
     // 用户名称
     pub user_name:          Option<String>,
     // 发布时间

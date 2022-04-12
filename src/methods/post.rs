@@ -9,7 +9,7 @@ use actix_web::{
 use actix_web::web::{Form, Json, Query};
 use tera::Context;
 
-use crate::entity::{BlogComments, BlogDetails, BlogInfo, BlogLabel};
+use crate::entity::{BlogComments, BlogInfo, BlogLabel, BlogPost};
 use crate::html;
 use crate::methods::base;
 use crate::util::{html_err, Results};
@@ -43,7 +43,7 @@ pub async fn submit_comments(params: Form<BlogComments>) -> Json<Results<String>
 
 }
 
-#[get("blog/details")]
+#[get("/post")]
 pub async fn details(params: Query<HashMap<String, usize>>) -> HttpResponse {
     let context = base::get_base_context().await;
 
@@ -72,16 +72,16 @@ pub async fn details(params: Query<HashMap<String, usize>>) -> HttpResponse {
     // 博客详情
     get_details(blog_id, rc.clone()).await;
 
-    html!{"blog/details".to_string(), &*rc.borrow()}
+    html!{"post".to_string(), &*rc.borrow()}
 }
 
 /// 获取博客详情
 async fn get_details(id: usize, c: Rc<RefCell<Context>>) {
     let mut c = c.borrow_mut();
-    let bd = BlogDetails::query_by_blog_info_id(id).await;
+    let bd = BlogPost::query_by_blog_info_id(id).await;
     let d = match bd {
         None => "<h1>暂无博客详情信息</h1>".to_string(),
-        Some(v) => v.details.unwrap_or("<h1>暂无博客详情信息</h1>".to_string())
+        Some(v) => v.post_html.unwrap_or("<h1>暂无博客详情信息</h1>".to_string())
     };
     c.insert("details", &d)
 }

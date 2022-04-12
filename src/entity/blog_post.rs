@@ -8,20 +8,24 @@ use serde:: {
 use crate::mysql;
 use crate::util::date_utils;
 
-#[crud_table]
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct BlogDetails {
-    // 主键
-    pub id:                 Option<usize>,
-    // 博客信息关联id
-    pub blog_info_id:       Option<usize>,
-    // 博客详细信息
-    pub details:            Option<String>,
-    pub create_time:        Option<date_utils::DateTimeUtil>,
-    pub update_time:        Option<date_utils::DateTimeUtil>
+/// 博客帖子详情
+#[rbatis::crud_table]
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct BlogPost {
+    /// 主键
+    pub id: Option<u64>,
+    /// 博客信息id
+    pub blog_info_id: Option<u64>,
+    /// 文本
+    pub post_text: Option<String>,
+    /// html
+    pub post_html: Option<String>,
+    /// 创建时间
+    pub create_time: Option<date_utils::DateTimeUtil>,
+    /// 修改时间
+    pub update_time: Option<date_utils::DateTimeUtil>,
 }
-
-impl BlogDetails {
+impl BlogPost {
     pub async fn query_by_blog_info_id(blog_info_id: usize) -> Option<Self> {
         let rb = mysql::default().await;
         let result: rbatis::Result<Option<Self>> = rb.fetch_by_column("blog_info_id", &blog_info_id).await;

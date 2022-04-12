@@ -12,11 +12,9 @@ pub async fn init() -> std::io::Result<()> {
         App::new()
             .service(Files::new("static/", static_path))
             .service(Files::new("files/", &conf.file_upload_path))
-            .service(web::resource("/").to(home))
-            .service(web::resource("/about").to(about))
             .service(methods::index::index)
-            .service(methods::details::details)
-            .service(methods::details::submit_comments)
+            .service(methods::post::details)
+            .service(methods::post::submit_comments)
             .service(methods::timeline::timeline)
             .default_service(web::to(default))
     }).bind(("0.0.0.0", config::default().port))?.run().await

@@ -23,7 +23,6 @@
 <body>
 <header class="lyear-header text-center" style="background-image:url({{ bg_path }});">
     <div class="lyear-header-container">
-        <div class="lyear-mask"></div>
         <h1 class="lyear-blogger pt-lg-4 mb-0"><a href="index">{{ blog_name }}</a></h1>
         <nav class="navbar navbar-expand-lg">
             <a class="navbar-toggler" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +32,9 @@
             </a>
 
             <div id="navigation" class="collapse navbar-collapse flex-column">
-                <div class="profile-section pt-3 pt-lg-0">
+                <div class="pt-3 pt-lg-0">
                     <img class="profile-image mb-3 rounded-circle mx-auto" src="{{ avatar_path }}" width="120" height="120" alt="笔下光年" >
-                    <div class="lyear-sentence mb-3">{{ blog_brief_introduction }}</div>
+                    <h6><div class="lyear-sentence mb-3">{{ blog_brief_introduction }}</div></h6>
                     <hr>
                 </div>
 
@@ -57,66 +56,21 @@
 <div class="lyear-wrapper">
     <section class="mt-5 pb-5">
         <div class="container">
-
             <div class="row">
-                <!-- 文章列表 -->
-                {% block content %}{% endblock content %}
-                <!-- 内容 end -->
-
-                <!-- 侧边栏 -->
-                <div class="col-xl-4">
-                    <div class="lyear-sidebar">
-                        <!-- 热门文章 -->
-                        <aside class="widget widget-hot-posts">
-                            <div class="widget-title">热门文章</div>
-                            <ul>
-                                {% for h in hot_blog %}
-                                <li>
-                                    <a href="details?v={{h.id}}">{{ h.title }}</a> <span>{{ h.publish_time }}</span>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </aside>
-
-                        <!-- 归档 -->
-                        <aside class="widget">
-                            <div class="widget-title">归档</div>
-                            <ul>
-                                {% for v in archive %}
-                                <li><a href="timeline?t={{v.year}}">{{v.year}}年</a> ({{v.count}})</li>
-                                {% endfor %}
-                            </ul>
-                        </aside>
-
-                        <!-- 友链 -->
-                        <aside class="widget widget-hot-links">
-                            <div class="widget-title">友链</div>
-                            <ul>
-                                {% for l in links %}
-                                <li><a href="{{ l.link_url }}" target="_blank">{{ l.link_name }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </aside>
-
-                        <!-- 标签 -->
-                        <aside class="widget widget-tag-cloud">
-                            <div class="widget-title">标签</div>
-                            <div class="tag-cloud">
-                                {% for l in labels %}
-                                <a href="#" class="badge badge-info">{{ l.label_value }}</a>
-                                {% endfor %}
-                            </div>
-                        </aside>
-
-                    </div>
+                <div class="col-xl-12">
+                    <!-- 文章列表 -->
+                    {% block content %}{% endblock content %}
+                    <!-- 内容 end -->
                 </div>
-                <!-- 侧边栏 end -->
             </div>
-
         </div>
-        <!-- end container -->
     </section>
 </div>
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2021 - 2022  &nbsp; &nbsp; 鲁ICP备2021040389号  &nbsp; &nbsp;  项目由 brave 支持.</p>
+    </div>
+</footer>
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/js/jquery.nicescroll.min.js"></script>
 <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
