@@ -9,7 +9,7 @@
     <meta name="baidu-site-verification" content="code-ZPTJy4ymGi" />
     <meta name="google-site-verification" content="7Omyz-CmGUhslCTvbSZ5au1KgCRR0B87Z9Xnd2TphHo" />
 
-    <title> {% block title %}{% endblock title %} &nbsp; - &nbsp; {{ blog_name }}</title>
+    <title> {% block title %}{% endblock title %} &nbsp; - &nbsp; Kang</title>
     <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico">
     <!-- css -->
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" />
@@ -21,9 +21,9 @@
 
 </head>
 <body>
-<header class="lyear-header text-center" style="background-image:url({{ bg_path }});">
+<header id="bg_path" class="lyear-header text-center">
     <div class="lyear-header-container">
-        <h1 class="lyear-blogger pt-lg-4 mb-0"><a href="index">{{ blog_name }}</a></h1>
+        <h1 class="lyear-blogger pt-lg-4 mb-0"><a id="blog_name" href="/"></a></h1>
         <nav class="navbar navbar-expand-lg">
             <a class="navbar-toggler" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
                 <div class="lyear-hamburger">
@@ -33,14 +33,14 @@
 
             <div id="navigation" class="collapse navbar-collapse flex-column">
                 <div class="pt-3 pt-lg-0">
-                    <img class="profile-image mb-3 rounded-circle mx-auto" src="{{ avatar_path }}" width="120" height="120" alt="笔下光年" >
-                    <h6><div class="lyear-sentence mb-3">{{ blog_brief_introduction }}</div></h6>
+                    <img id="avatar_path" class="profile-image mb-3 rounded-circle mx-auto" width="120" height="120" alt="Gaoxiangkang" >
+                    <div class="lyear-sentence mb-3"><h6 id="blog_brief_introduction"></h6></div>
                     <hr>
                 </div>
 
                 <ul class="navbar-nav flex-column text-center">
                     <li class="nav-item active">
-                        <a class="nav-link" href="index">首页</a>
+                        <a class="nav-link" href="/">首页</a>
                     </li>
                 </ul>
 
@@ -68,7 +68,20 @@
 </div>
 <footer class="footer">
     <div class="container">
-        <p>&copy; 2021 - 2022  &nbsp; &nbsp; 鲁ICP备2021040389号  &nbsp; &nbsp;  项目由 brave 支持.</p>
+        <p>
+            &copy;
+            2021 - 2022
+            &nbsp; &nbsp;
+            <a href="https://beian.miit.gov.cn/#/Integrated/recordQuery" target="_blank" style="color: darkred; text-decoration: underline">
+                鲁ICP备2021040389号
+            </a>
+            &nbsp; &nbsp;
+            项目由
+            <a href="https://github.com/1148118271/brave" target="_blank" style="color: darkred; text-decoration: underline">
+                brave
+            </a>
+            驱动.
+        </p>
     </div>
 </footer>
 <script type="text/javascript" src="/static/js/jquery.min.js"></script>
@@ -78,6 +91,21 @@
 <script type="text/javascript" src="/static/js/jquery.nicescroll.min.js"></script>
 <script type="text/javascript" src="/static/js/highlight/highlight.pack.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+<script>
+    $.ajax({
+        url: "/base/conf",
+        type: "get",
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            $('#bg_path').css('background-image', 'url('+ result.bg_path +')')
+            $('#blog_name').text(result.blog_name)
+            $('#avatar_path').attr('src', result.avatar_path)
+            $('#blog_brief_introduction').text(result.blog_brief_introduction)
+        },
+    })
+</script>
 
 {% block script %}{% endblock script %}
 

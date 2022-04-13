@@ -1,12 +1,11 @@
+use rbatis::crud_table;
+use rbatis::crud::CRUD;
 use serde:: {
-    Serialize,
     Deserialize,
+    Serialize,
 };
 
-use rbatis::{ crud_table };
-use rbatis::crud::CRUD;
 use crate::mysql;
-
 
 #[crud_table]
 #[derive(Serialize, Deserialize, Debug, Clone)]

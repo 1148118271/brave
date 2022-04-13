@@ -1,17 +1,17 @@
-pub use blog_comments::BlogComments;
-pub use blog_config::BlogConfig;
-pub use blog_files::BlogFiles;
-pub use blog_info::BlogInfo;
-pub use blog_label::BlogLabel;
-pub use blog_links::BlogLinks;
-pub use blog_post::BlogPost;
+pub use comments::BlogComments;
+pub use config::BlogConfig;
+pub use files::Files;
+pub use info::BlogInfo;
+pub use label::BlogLabel;
+pub use links::BlogLinks;
+pub use post::BlogPost;
 
-mod blog_info;
-mod blog_label;
-mod blog_post;
-mod blog_comments;
-mod blog_links;
-mod blog_files;
-mod blog_config;
+mod info;
+mod label;
+mod post;
+mod comments;
+mod links;
+mod files;
+mod config;
 
 

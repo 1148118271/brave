@@ -11,11 +11,10 @@ use tera::Context;
 
 use crate::entity::{BlogComments, BlogInfo, BlogLabel, BlogPost};
 use crate::html;
-use crate::methods::base;
-use crate::util::{html_err, Results};
+use crate::util::{date_utils, html_err, Results};
 
-#[post("blog/comment")]
-pub async fn submit_comments(params: Form<BlogComments>) -> Json<Results<String>> {
+#[post("/comment")]
+pub async fn submit_comments(mut params: Form<BlogComments>) -> Json<Results<String>> {
     let comment = match &params.comment {
         None => false,
         Some(v) => !v.is_empty()
@@ -30,6 +29,7 @@ pub async fn submit_comments(params: Form<BlogComments>) -> Json<Results<String>
     if !name {
         return Json(Results::error("昵称不能为空！", String::new()))
     }
+    params.create_time = Some(date_utils::DateTimeUtil::from(chrono::Local::now()));
 
     match params.save().await {
         Err(e) => {
@@ -43,12 +43,11 @@ pub async fn submit_comments(params: Form<BlogComments>) -> Json<Results<String>
 
 }
 
+/// 帖子详情
 #[get("/post")]
-pub async fn details(params: Query<HashMap<String, usize>>) -> HttpResponse {
-    let context = base::get_base_context().await;
-
+pub async fn post(params: Query<HashMap<String, usize>>) -> HttpResponse {
+    let context = Context::new();
     let rc = Rc::new(RefCell::new(context));
-
     // 获取博客id
     let blog_id = params.get("v");
     if blog_id.is_none() {
@@ -56,10 +55,8 @@ pub async fn details(params: Query<HashMap<String, usize>>) -> HttpResponse {
         return html_err()
     }
     let blog_id = *(blog_id.unwrap());
-
     // 阅读次数加1
     BlogInfo::add_read_count(blog_id).await;
-
     // 标题, 时间, 查看次数
     let (flag, tags) = title_and_publish_time(blog_id, rc.clone()).await;
     if !flag {
@@ -70,20 +67,20 @@ pub async fn details(params: Query<HashMap<String, usize>>) -> HttpResponse {
     // 评论
     get_comments(blog_id, rc.clone()).await;
     // 博客详情
-    get_details(blog_id, rc.clone()).await;
+    get_post(blog_id, rc.clone()).await;
 
     html!{"post".to_string(), &*rc.borrow()}
 }
 
 /// 获取博客详情
-async fn get_details(id: usize, c: Rc<RefCell<Context>>) {
+async fn get_post(id: usize, c: Rc<RefCell<Context>>) {
     let mut c = c.borrow_mut();
     let bd = BlogPost::query_by_blog_info_id(id).await;
     let d = match bd {
         None => "<h1>暂无博客详情信息</h1>".to_string(),
         Some(v) => v.post_html.unwrap_or("<h1>暂无博客详情信息</h1>".to_string())
     };
-    c.insert("details", &d)
+    c.insert("post", &d)
 }
 
 /// 获取评论信息

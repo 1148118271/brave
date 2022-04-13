@@ -9,7 +9,7 @@
 {% for bi in blog_infos %}
   <article class="lyear-arc">
     <div class="arc-header">
-      <h2 class="arc-title"><a href="/post?v={{bi.id}}">{{ bi.title }}</a></h2>
+      <h4 class="arc-title"><a href="/post?v={{bi.id}}">{{ bi.title }}</a></h4>
       <ul class="arc-meta">
         <li><i class="mdi mdi-calendar"></i> {{ bi.publish_time }}</li>
         <li><i class="mdi mdi-tag-text-outline"></i>
@@ -27,7 +27,7 @@
     </div>
 
     <div class="arc-synopsis p1">
-      <p>{{ bi.blog_details | safe }}</p>
+      <p>{{ bi.post | safe }}</p>
     </div>
   </article>
 

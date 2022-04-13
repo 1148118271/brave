@@ -1,10 +1,11 @@
 use chrono::NaiveDateTime;
+use rbatis::crud_table;
 use rbatis::crud::CRUD;
-use rbatis::{ crud_table };
 use serde:: {
-    Serialize,
     Deserialize,
+    Serialize,
 };
+
 use crate::mysql;
 
 #[crud_table]

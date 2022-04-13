@@ -31,17 +31,14 @@ body {
 }
 
 a {
-    color: #4d5259;
-    text-decoration: none;
-	-webkit-transition: color 0.5s, background-color 0.5s;
-	-o-transition: color 0.5s, background-color 0.5s;
+    color: #325376;
 	transition: color 0.5s, background-color 0.5s;
 }
 a:hover,
 a:active,
 a:focus {
 	outline: none;
-	text-decoration: none;
+	text-decoration: deeppink;
 }
 i[class*='mdi'] {
     vertical-align: middle;
