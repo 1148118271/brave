@@ -17,6 +17,8 @@ pub async fn init() -> std::io::Result<()> {
             .service(methods::post::post)
             .service(methods::post::submit_comments)
             .service(methods::timeline::timeline)
+            .service(methods::links::links)
+            .service(methods::about::about)
             .default_service(web::to(default))
     }).bind(("0.0.0.0", config::default().port))?.run().await
 }

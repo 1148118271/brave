@@ -32,65 +32,19 @@ pub struct BlogInfo {
 }
 
 
-#[crud_table(table_columns:"`year`, `count`")]
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Archive {
-    year: usize,
-    count: u8
-}
-
 impl BlogInfo {
 
-    pub async fn query_hot() -> Vec<Self> {
+    pub async fn query_all() -> Vec<Self> {
         let rb = mysql::default().await;
-
-        let page = PageRequest::new(1, 3);
-
         let wrapper = rb.new_wrapper()
-            .eq("is_publish", "1")
-            .order_by(false, &["read_count"]);
-
-        let result: rbatis::Result<Page<Self>> = rb.fetch_page_by_wrapper(wrapper, &page).await;
-
+            .eq("is_publish","1")
+            .order_by(false, &["publish_time"]);
+        let result: rbatis::Result<Vec<BlogInfo>> = rb.fetch_list_by_wrapper(wrapper).await;
         match result {
-            Ok(v) => v.records,
-            Err(e) => {
-                log::error!("查询热门文章异常, 异常信息为: {}", e);
-                Vec::new()
-            }
-        }
-    }
-
-
-    pub async fn archive_by_year(year: &str) -> Vec<Self> {
-        let rb = mysql::default().await;
-        let sql = format!(r"select * from blog_info where YEAR(publish_time) = '{}'", year);
-        let v: rbatis::Result<Vec<Self>> = rb.fetch(&sql, vec![]).await;
-        match v {
             Ok(v) => v,
             Err(e) => {
-                log::error!("根据年份查询归档信息异常, 异常信息为: {}", e);
-                Vec::new()
-            }
-        }
-    }
-
-    pub async fn archive() -> Vec<Archive> {
-        let rb = mysql::default().await;
-        let v: rbatis::Result<Vec<Archive>> = rb.fetch(r#"
-        select
-        year(publish_time) as "year",
-        count(publish_time) as "count"
-        from
-        blog_info
-        group by YEAR(publish_time)
-        order by year(publish_time) desc"#,
-                         vec![]).await;
-        match v {
-            Ok(v) => v,
-            Err(e) => {
-                log::error!("查询归档信息异常, 异常信息为: {}", e);
-                Vec::new()
+                log::error!("根据博客信息异常, 异常信息为: {}", e);
+                vec![]
             }
         }
     }
@@ -99,7 +53,8 @@ impl BlogInfo {
         let rb = mysql::default().await;
         let page = PageRequest::new(page_no, 5);
         let w = rb.new_wrapper()
-            .eq("is_publish","1");
+            .eq("is_publish","1")
+            .order_by(false, &["publish_time"]);
         let result: rbatis::Result<Page<Self>> = rb.fetch_page_by_wrapper(w, &page).await;
         match result {
             Ok(v) => Some(v),

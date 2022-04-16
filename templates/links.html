@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+友链
+{% endblock title %}
+
+{% block content %}
+<article class="lyear-arc">
+    <div>
+        <h4 id="-">友链</h4>
+        <p><br /></p>
+        <ul>
+            {% for l in links %}
+            <li><p><a style="text-decoration: underline" class="text-danger" href="{{l.link_url}}">{{l.link_name}}</a></p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</article>
+{% endblock content %}

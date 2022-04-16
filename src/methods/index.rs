@@ -40,7 +40,6 @@ pub async fn index(page: Query<HashMap<String, String>>) -> HttpResponse {
     };
     let mut results = vec![];
     blog_info(vb, &mut results).await;
-    results.reverse();
     context.insert("blog_infos", &results);
     html!{"index".to_string(), context}
 }

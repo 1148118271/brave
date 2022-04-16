@@ -1,6 +1,6 @@
 use chrono::NaiveDateTime;
-use rbatis::crud_table;
 use rbatis::crud::CRUD;
+use rbatis::crud_table;
 use serde:: {
     Deserialize,
     Serialize,
@@ -19,17 +19,6 @@ pub struct BlogLabel {
 }
 
 impl BlogLabel {
-    pub async fn query_all() -> Vec<Self> {
-        let rb = mysql::default().await;
-        let result: rbatis::Result<Vec<Self>> = rb.fetch_list().await;
-        match result {
-            Ok(v) => v,
-            Err(e) => {
-                log::error!("查询标签列表异常, 异常信息为: {}", e);
-                vec![]
-            }
-        }
-    }
 
     pub async fn query_by_key(key: &str) -> Option<BlogLabel> {
         let rb = mysql::default().await;

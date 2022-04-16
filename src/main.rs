@@ -1,3 +1,5 @@
+extern crate core;
+
 mod methods;
 mod util;
 mod entity;
