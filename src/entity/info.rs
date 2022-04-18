@@ -43,7 +43,7 @@ impl BlogInfo {
         match result {
             Ok(v) => v,
             Err(e) => {
-                log::error!("根据博客信息异常, 异常信息为: {}", e);
+                log::error!("查询博客列表信息异常, 异常信息为: {}", e);
                 vec![]
             }
         }
@@ -59,7 +59,7 @@ impl BlogInfo {
         match result {
             Ok(v) => Some(v),
             Err(e) => {
-                log::error!("根据博客信息异常, 异常信息为: {}", e);
+                log::error!("查询博客分页信息异常, 异常信息为: {}", e);
                 None
             }
         }
