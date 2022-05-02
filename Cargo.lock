@@ -636,6 +636,7 @@ dependencies = [
  "actix-files",
  "actix-web",
  "bson",
+ "cached-rs",
  "chrono",
  "log",
  "log4rs",
@@ -746,6 +747,11 @@ name = "cache-padded"
 version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "631ae5198c9be5e753e5cc215e1bd73c2b466a3565173db433f52bb9d3e66dba"
+
+[[package]]
+name = "cached-rs"
+version = "0.1.0"
+source = "git+https://gitee.com/gaoxiangkang/cached-rs.git#dd716d9a4831fde7a74d2474fddfe59f905c024a"
 
 [[package]]
 name = "cc"

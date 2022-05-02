@@ -7,6 +7,7 @@ mod path;
 mod config;
 mod mysql;
 mod tera;
+mod cached;
 
 #[actix_web::main]
 async fn main() {

@@ -13,8 +13,8 @@ use serde:: {
 };
 use tera::Context;
 
+use crate::{cached, html};
 use crate::entity::{BlogComments, BlogInfo, BlogLabel, BlogPost};
-use crate::html;
 use crate::util::{date_utils, html_err};
 use crate::util::date_utils::DateTimeUtil;
 
@@ -51,10 +51,27 @@ async fn blog_info(bs: Vec<BlogInfo>, results: &mut Vec<Result>) {
         if v.id.is_none() {
             continue
         }
-        let bd = match BlogPost::query_by_blog_info_id(v.id.unwrap()).await {
-            None => continue,
-            Some(v) => v
-        };
+        let mut post_html = None;
+        let cached = cached::default();
+        let phk = format!("{}_{}",cached::POST_HTML_KEY, v.id.unwrap());
+        if let Ok(v) = cached.get(&phk) {
+            if let Ok(v) = String::from_utf8(v) {
+                if !v.is_empty() {
+                    log::debug!("获取[{}]缓存信息.", phk);
+                    post_html = Some(v);
+                }
+            }
+        }
+        if post_html.is_none() {
+            match BlogPost::query_by_blog_info_id(v.id.unwrap()).await {
+                None => continue,
+                Some(v) => {
+                    post_html = Some(v.post_html.unwrap_or(String::new()));
+                    log::debug!("添加[{}]缓存信息.", phk);
+                    cached.set(&phk, post_html.as_ref().unwrap()).expect("添加缓存信息失败");
+                }
+            }
+        }
         // 标签列表
         let label_key = v.label_key.unwrap_or("".to_string()).clone();
         let label_keys: Vec<&str> = label_key.split(",").collect();
@@ -73,7 +90,7 @@ async fn blog_info(bs: Vec<BlogInfo>, results: &mut Vec<Result>) {
             comment_count: blog_comments.len() as u64,
             comment: blog_comments,
             read_count: v.read_count.unwrap_or(0) as u64,
-            post: bd.post_html.unwrap_or(String::new())
+            post: post_html.unwrap()
         };
         results.push(r)
     }
